@@ -27,5 +27,5 @@ function initBackground() {
         );
     }
     return backgroundObjects;
-}
+};
 

@@ -1,7 +1,6 @@
 class World {
     character = new Character();
     level = level1;
-    backgroundObjects = [];
     canvas;
     ctx;
     keyboard;
@@ -11,24 +10,11 @@ class World {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
-        this.initBackground();
         this.draw();
         this.setWorld();
     }
 
-    initBackground() {
-        for (let index = -10; index <= 10; index++) {
-            let x = index * 719;
-            let suffix = (Math.abs(index) % 2 === 0) ? '1' : '2';
-
-            this.backgroundObjects.push(
-                new BackgroundObject('img/5_background/layers/air.png', x),
-                new BackgroundObject(`img/5_background/layers/3_third_layer/${suffix}.png`, x),
-                new BackgroundObject(`img/5_background/layers/2_second_layer/${suffix}.png`, x),
-                new BackgroundObject(`img/5_background/layers/1_first_layer/${suffix}.png`, x)
-            );
-        }
-    }
+ 
 
     setWorld() {
         this.character.world = this;
@@ -39,7 +25,7 @@ class World {
 
         this.ctx.translate(this.camera_x, 0);
 
-        this.addObjectsToMap(this.backgroundObjects);
+        this.addObjectsToMap(this.level.backgroundObjects);
 
         this.addToMap(this.character);
         this.addObjectsToMap(this.level.enemies);

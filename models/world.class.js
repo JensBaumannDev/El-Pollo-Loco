@@ -14,7 +14,7 @@ class World {
         this.setWorld();
     }
 
- 
+
 
     setWorld() {
         this.character.world = this;

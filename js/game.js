@@ -8,37 +8,37 @@ function init() {
 }
 
 window.addEventListener("keydown", (keyevent) => {
-    if(keyevent.keyCode == 65){
+    if(keyevent.key == 'a'){
         keyboard.LEFT = true;
     }
-       if(keyevent.keyCode == 68){
+       if(keyevent.key == 'd'){
         keyboard.RIGHT = true;
     }
-       if(keyevent.keyCode == 87){
+       if(keyevent.key == 'w'){
         keyboard.UP = true;
     }
-       if(keyevent.keyCode == 83){
+       if(keyevent.key == 's'){
         keyboard.DOWN = true;
     }
-       if(keyevent.keyCode == 32){
+       if(keyevent.key == ' '){
         keyboard.SPACE = true;
     } 
 });
 
 window.addEventListener("keyup", (keyevent) => {
-    if(keyevent.keyCode == 65){
+    if(keyevent.key == 'a'){
         keyboard.LEFT = false;
     }
-       if(keyevent.keyCode == 68){
+       if(keyevent.key == 'd'){
         keyboard.RIGHT = false;
     }
-       if(keyevent.keyCode == 87){
+       if(keyevent.key== 'w'){
         keyboard.UP = false;
     }
-       if(keyevent.keyCode == 83){
+       if(keyevent.key == 's'){
         keyboard.DOWN = false;
     }
-       if(keyevent.keyCode == 32){
+       if(keyevent.key == ' '){
         keyboard.SPACE = false;
     } 
 });

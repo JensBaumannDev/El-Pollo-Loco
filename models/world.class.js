@@ -1,13 +1,7 @@
 class World {
     character = new Character();
-    enemies = [
-        new Chicken(),
-        new Chicken(),
-        new Chicken()
-    ];
-    clouds = [
-        new Cloud()
-    ];
+    enemies = level1.enemies;
+    clouds = level1.clouds;
     backgroundObjects = [];
     canvas;
     ctx;

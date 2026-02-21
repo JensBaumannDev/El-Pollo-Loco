@@ -78,14 +78,14 @@ class Character extends MovableObject {
         }, 1000 / 60);
 
         setInterval(() => {
-            if (this.isAboveGround()) {
-                this.playAnimation(this.IMAGES_JUMPING);
+            if (this.isAboveGround() || this.speedY > 0) {
+                this.playJumpAnimation();
                 this.framesanimated = 0;
 
             } else {
                 if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                     this.playAnimation(this.IMAGES_WALKING);
-                    this.framesanimated = 5 ;
+                    this.framesanimated = 5;
 
                 } else {
                     this.framesanimated++;
@@ -98,6 +98,13 @@ class Character extends MovableObject {
                 }
             }
         }, 100);
+    }
+
+    playJumpAnimation() {
+        let index = Math.floor(((this.speedY + 30) / 60) * (this.IMAGES_JUMPING.length - 1));
+        index = Math.max(0, Math.min(this.IMAGES_JUMPING.length - 1, index));
+        let path = this.IMAGES_JUMPING[index];
+        this.img = this.imageCache[path];
     }
 
     jump() {

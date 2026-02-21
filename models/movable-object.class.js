@@ -17,7 +17,7 @@ class MovableObject {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
             }
-        }, 1000 / 35);
+        }, 1000 / 40);
     }
 
     isAboveGround() {
@@ -53,10 +53,19 @@ class MovableObject {
     }
 
     playAnimation(images) {
-        let i = this.currentImage % this.IMAGES_WALKING.length;
+        let i = this.currentImage % images.length;
         let path = images[i];
         this.img = this.imageCache[path];
         this.currentImage++;
+    }
+
+    playAnimationOnce(images) {
+        let i = this.currentImage;
+        if (i < images.length) {
+            let path = images[i];
+            this.img = this.imageCache[path];
+            this.currentImage++;
+        }
     }
 
     moveRight() {

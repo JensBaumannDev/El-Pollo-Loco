@@ -16,11 +16,12 @@ canvas {
     background-color: black;
     border: 5px solid rgba(0, 0, 0, 0.172);
     box-shadow: 0px 0px 10px black;
+    display: block;
 }
 
 h1 {
     font-family: 'zabras', 'Times New Roman', Times, serif;
-    font-size: 160px;
+    font-size: clamp(40px, 12vw, 160px);
     letter-spacing: 10px;
     margin: 0;
     margin-bottom: 60px;
@@ -31,3 +32,22 @@ h1 {
     font-family: 'zabras';
     src: url(./fonts/Zabars.ttf) format('truetype');
 }
+
+/* #region RESPONSIVE */
+@media only screen and (max-width: 720px) {
+    canvas {
+        width: 100%;
+    }
+}
+
+@media only screen and (max-height: 480px) {
+    canvas {
+        height: 100vh;
+    }
+
+    h1 {
+        display: none;
+    }
+}
+
+/* #endregion*/

@@ -8,6 +8,39 @@ class World {
     statusBar = new StatusBar();
     coinStatusBar = new CoinStatusBar();
     bottleStatusBar = new BottleStatusBar();
+    newSound = new Audio();
+
+    mySounds = {
+        character: {
+            damage: 'audio/character/characterDamage.mp3',
+            dead: 'audio/character/characterDead.wav',
+            jump: 'audio/character/characterJump.wav',
+            run: 'audio/character/characterRun.mp3',
+            snoring: 'audio/character/characterSnoring.mp3'
+        },
+
+        chicken: {
+            dead: 'audio/chicken/chickenDead.mp3',
+            dead2: 'audio/chicken/chickenDead2.mp3'
+        },
+
+        collectibles: {
+            collect: 'audio/collectibles/bottleCollectSound.wav',
+            collect2: 'audio/collectibles/collectSound.wav'
+        },
+
+        endboss: {
+            voice: 'audio/endboss/endbossApproach.wav'
+        },
+
+        gamestart: {
+            start: 'audio/game/gameStart.mp3'
+        },
+
+        thowable: {
+            bottlebreak: 'audio/throwable/bottleBreak.mp3'
+        },
+    }
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -17,7 +50,6 @@ class World {
         this.setWorld();
         this.checkCollisions();
     }
-
 
 
     setWorld() {

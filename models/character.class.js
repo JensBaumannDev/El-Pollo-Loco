@@ -88,6 +88,8 @@ class Character extends MovableObject {
 
             if (this.world.keyboard.SPACE && !this.isAboveGround()) {
                 this.jump();
+                this.world.newSound.src = this.world.mySounds.character.jump;
+                this.world.newSound.play();
             }
 
             this.world.camera_x = -this.x + 100;
@@ -128,6 +130,6 @@ class Character extends MovableObject {
     }
 
     jump() {
-        this.speedY = 30;
+        this.speedY = 20;
     }
 };

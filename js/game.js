@@ -14,6 +14,10 @@ window.addEventListener("keydown", (keyevent) => {
     if (keyevent.key == 'd') {
         keyboard.RIGHT = true;
     }
+    if (keyevent.key == 'f'){
+        keyboard.f = true;
+    }
+
     if (keyevent.key == 'w') {
         keyboard.UP = true;
     }
@@ -31,6 +35,9 @@ window.addEventListener("keyup", (keyevent) => {
     }
     if (keyevent.key == 'd') {
         keyboard.RIGHT = false;
+    }
+     if (keyevent.key == 'f'){
+        keyboard.f = false;
     }
     if (keyevent.key == 'w') {
         keyboard.UP = false;

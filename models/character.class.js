@@ -60,6 +60,12 @@ class Character extends MovableObject {
         'img/2_character_pepe/4_hurt/H-42.png',
         'img/2_character_pepe/4_hurt/H-43.png'
     ];
+    offset = {
+        top: 100,
+        bottom: 10,
+        left: 30,
+        right: 30
+    };
     world;
     framesanimated = 0;
 

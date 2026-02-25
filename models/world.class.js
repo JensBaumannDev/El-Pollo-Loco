@@ -9,6 +9,8 @@ class World {
     coinStatusBar = new CoinStatusBar();
     bottleStatusBar = new BottleStatusBar();
     throwableObjects = [];
+    collectedCoins = 0;
+    totalCoins = 0;
     newSound = new Audio();
     mySounds = {
         character: {
@@ -46,6 +48,8 @@ class World {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
+        this.totalCoins = this.level.coins.length;
+        this.coinStatusBar.setPercentage(0);
         this.draw();
         this.setWorld();
         this.run();
@@ -63,8 +67,8 @@ class World {
         }, 200);
     }
 
-    checkThrowObjects(){
-        if(this.keyboard.f){
+    checkThrowObjects() {
+        if (this.keyboard.f) {
             let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
             this.throwableObjects.push(bottle);
         }
@@ -75,6 +79,17 @@ class World {
             if (this.character.isColliding(enemy) && !this.character.isHurt()) {
                 this.character.hit();
                 this.statusBar.setPercentage(this.character.energy);
+            }
+        });
+
+        this.level.coins.forEach((coin, index) => {
+            if (this.character.isColliding(coin)) {
+                this.level.coins.splice(index, 1);
+                this.collectedCoins++;
+                let percentage = (this.collectedCoins / this.totalCoins) * 100;
+                this.coinStatusBar.setPercentage(percentage);
+                this.newSound.src = this.mySounds.collectibles.collect2;
+                this.newSound.play();
             }
         });
     }
@@ -92,6 +107,7 @@ class World {
         this.ctx.translate(this.camera_x, 0);
         this.addToMap(this.character);
         this.addObjectsToMap(this.level.enemies);
+        this.addObjectsToMap(this.level.coins);
         this.addObjectsToMap(this.throwableObjects);
 
 

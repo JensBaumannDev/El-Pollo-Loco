@@ -8,8 +8,9 @@ const level1 = new Level(
     [
         new Cloud()
     ],
-    initBackground()
-)
+    initBackground(),
+    initCoins()
+);
 
 function initBackground() {
     let backgroundObjects = [];
@@ -27,3 +28,12 @@ function initBackground() {
     return backgroundObjects;
 };
 
+function initCoins() {
+    let coins = [];
+    for (let i = 0; i < 30; i++) {
+        let x = 300 + Math.random() * 6900;
+        let y = 80 + Math.random() * 250;
+        coins.push(new Coin(x, y));
+    }
+    return coins;
+};

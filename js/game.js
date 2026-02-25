@@ -14,7 +14,7 @@ window.addEventListener("keydown", (keyevent) => {
     if (keyevent.key == 'd') {
         keyboard.RIGHT = true;
     }
-    if (keyevent.key == 'f'){
+    if (keyevent.key == 'f') {
         keyboard.f = true;
     }
 
@@ -36,7 +36,7 @@ window.addEventListener("keyup", (keyevent) => {
     if (keyevent.key == 'd') {
         keyboard.RIGHT = false;
     }
-     if (keyevent.key == 'f'){
+    if (keyevent.key == 'f') {
         keyboard.f = false;
     }
     if (keyevent.key == 'w') {
@@ -49,3 +49,19 @@ window.addEventListener("keyup", (keyevent) => {
         keyboard.SPACE = false;
     }
 });
+
+window.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('startBtn').addEventListener('click', startGame);
+});
+
+function startGame() {
+    let startscreen = document.querySelector('.startscreen');
+    startscreen.style.opacity = '0';
+
+    setTimeout(() => {
+        startscreen.style.display = 'none';
+        document.querySelector('h1').style.display = 'block';
+        document.getElementById('canvas').style.display = 'block';
+        init();
+    }, 500);
+}

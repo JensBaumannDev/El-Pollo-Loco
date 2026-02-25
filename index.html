@@ -15,7 +15,7 @@
     <script src="./models/character.class.js"></script>
     <script src="./models/chicken.class.js"></script>
     <script src="./models/endboss.class.js"></script>
-     <script src="./models/coin.class.js"></script>
+    <script src="./models/coin.class.js"></script>
     <script src="./models/cloud.class.js"></script>
     <script src="./models/status-bar.class.js"></script>
     <script src="./models/coin-status-bar.class.js"></script>
@@ -30,9 +30,23 @@
 
 </head>
 
-<body onload="init()">
-
+<body>
     <h1>El Pollo Loco</h1>
+
+    <div class="startscreen">
+        <div class="startscreen-content">
+            <div class="game-logo">
+                <h2>El Pollo Loco</h2>
+                <p class="subtitle">Fight the Crazy Chickens!</p>
+            </div>
+            <div class="game-menu">
+                <button type="button" class="btn-primary" id="startBtn">Start Game</button>
+                <button type="button" class="btn-secondary">Instructions</button>
+                <button type="button" class="btn-secondary">Settings</button>
+            </div>
+        </div>
+    </div>
+
     <canvas id="canvas" width="720" height="480"></canvas>
 
 </body>

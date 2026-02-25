@@ -41,8 +41,70 @@
             </div>
             <div class="game-menu">
                 <button type="button" class="btn-primary" id="startBtn">Start Game</button>
-                <button type="button" class="btn-secondary">Instructions</button>
-                <button type="button" class="btn-secondary">Settings</button>
+                <button type="button" class="btn-secondary" id="instructionsBtn">Instructions</button>
+                <button type="button" class="btn-secondary" id="settingsBtn">Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Instructions Modal -->
+    <div class="modal" id="instructionsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Instructions</h2>
+                <button class="close-btn" id="closeInstructions">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h3>Key Bindings</h3>
+                <div class="key-bindings">
+                    <div class="key-group">
+                        <div class="key-item">
+                            <span class="key">A</span>
+                            <span class="action">Move Left</span>
+                        </div>
+                        <div class="key-item">
+                            <span class="key">D</span>
+                            <span class="action">Move Right</span>
+                        </div>
+                    </div>
+                    <div class="key-group">
+                        <div class="key-item">
+                            <span class="key">SPACE</span>
+                            <span class="action">Jump</span>
+                        </div>
+                        <div class="key-item">
+                            <span class="key">F</span>
+                            <span class="action">Throw Bottle</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Settings</h2>
+                <button class="close-btn" id="closeSettings">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="setting-item">
+                    <label for="volumeSlider">Volume</label>
+                    <div class="volume-control">
+                        <span class="volume-icon">🔊</span>
+                        <input type="range" id="volumeSlider" min="0" max="100" value="50">
+                        <span class="volume-value" id="volumeValue">50%</span>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <label>Display Mode</label>
+                    <div class="display-controls">
+                        <button type="button" class="display-btn active" id="normalModeBtn">Normal</button>
+                        <button type="button" class="display-btn" id="fullscreenModeBtn">Fullscreen</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -3,6 +3,7 @@ class Character extends MovableObject {
     height = 250;
     width = 130;
     speed = 5;
+    snoringSoundPlayed = false;
     IMAGES_WALKING = [
         'img/2_character_pepe/2_walk/W-21.png',
         'img/2_character_pepe/2_walk/W-22.png',
@@ -68,6 +69,7 @@ class Character extends MovableObject {
     };
     world;
     framesanimated = 0;
+    snoringSoundPlaying = false;
 
     constructor() {
         super().loadImage('img/2_character_pepe/2_walk/W-21.png')
@@ -117,6 +119,11 @@ class Character extends MovableObject {
 
                 } else {
                     this.framesanimated++;
+
+                    if (this.framesanimated === 101) {
+                        this.world.newSound.src = this.world.mySounds.character.snoring;
+                        this.world.newSound.play();
+                    }
 
                     if (this.framesanimated > 100) {
                         this.playAnimation(this.IMAGES_IDLE_LONG)

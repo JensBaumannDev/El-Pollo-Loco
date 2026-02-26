@@ -1,10 +1,12 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
+let globalVolume = 0.5;
 
 function init() {
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
+    world.newSound.volume = globalVolume;
 }
 
 window.addEventListener("keydown", (keyevent) => {
@@ -59,6 +61,11 @@ window.addEventListener('DOMContentLoaded', function () {
     
     const volumeSlider = document.getElementById('volumeSlider');
     const volumeValue = document.getElementById('volumeValue');
+    const savedVolume = parseFloat(localStorage.getItem('gameVolume'));
+    const initialVolume = Number.isFinite(savedVolume) ? savedVolume : 0.5;
+    volumeSlider.value = Math.round(initialVolume * 100);
+    volumeValue.textContent = volumeSlider.value + '%';
+    setGlobalVolume(initialVolume);
     volumeSlider.addEventListener('input', function() {
         volumeValue.textContent = this.value + '%';
         setGlobalVolume(this.value / 100);
@@ -92,11 +99,15 @@ function closeSettings() {
 }
 
 function setGlobalVolume(volume) {
-    localStorage.setItem('gameVolume', volume);
+    globalVolume = Math.max(0, Math.min(1, volume));
+    localStorage.setItem('gameVolume', globalVolume);
     const audioElements = document.querySelectorAll('audio');
     audioElements.forEach(audio => {
-        audio.volume = volume;
+        audio.volume = globalVolume;
     });
+    if (world && world.newSound) {
+        world.newSound.volume = globalVolume;
+    }
 }
 
 function setNormalMode() {

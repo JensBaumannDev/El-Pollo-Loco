@@ -1,13 +1,6 @@
 const level1 = new Level(
-    [
-        new Chicken(),
-        new Chicken(),
-        new Chicken(),
-        new Endboss()
-    ],
-    [
-        new Cloud()
-    ],
+    initEnemies(),
+    initClouds(),
     initBackground(),
     initCoins()
 );
@@ -27,6 +20,31 @@ function initBackground() {
     }
     return backgroundObjects;
 };
+
+function initClouds() {
+    let clouds = [];
+    for (let i = 0; i < 15; i++) {
+        clouds.push(new Cloud());
+    }
+    return clouds;
+}
+
+function initEnemies() {
+    let enemies = [];
+    for (let i = 0; i < 10; i++) {
+        enemies.push(new Chicken());
+    }
+    enemies.push(new Endboss());
+    return enemies;
+}
+
+function initChicken() {
+    let chicken = [];
+    for (let i = 0; i < 10; i++) {
+        chicken.push(new Chicken());
+    }
+    return chicken;
+}
 
 function initCoins() {
     let coins = [];

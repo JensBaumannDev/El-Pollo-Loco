@@ -3,11 +3,22 @@ let world;
 let keyboard = new Keyboard();
 let globalVolume = 0.5;
 
+function updateCanvasSize() {
+    canvas = document.getElementById('canvas');
+    
+    // Set default resolution
+    canvas.width = 720;
+    canvas.height = 480;
+}
+
 function init() {
+    updateCanvasSize();
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
     world.newSound.volume = globalVolume;
 }
+
+window.addEventListener('resize', updateCanvasSize);
 
 window.addEventListener("keydown", (keyevent) => {
     if (keyevent.key == 'a') {
@@ -53,6 +64,9 @@ window.addEventListener("keyup", (keyevent) => {
 });
 
 window.addEventListener('DOMContentLoaded', function () {
+    // Initialize canvas size immediately
+    updateCanvasSize();
+    
     document.getElementById('startBtn').addEventListener('click', startGame);
     document.getElementById('instructionsBtn').addEventListener('click', showInstructions);
     document.getElementById('settingsBtn').addEventListener('click', showSettings);

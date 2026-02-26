@@ -1,4 +1,18 @@
 /*#region BASE STYLES*/
+* {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+}
+
+html {
+    height: 100%;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    overscroll-behavior: none;
+    background-color: black;
+}
+
 body {
     background-image:
         radial-gradient(circle, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.8) 100%),
@@ -6,11 +20,19 @@ body {
     background-position: center;
     background-size: cover;
     height: 100vh;
+    height: 100dvh;
+    height: -webkit-fill-available;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     margin: 0;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    touch-action: none;
+    -webkit-overflow-scrolling: auto;
+    overscroll-behavior: none;
 }
 
 canvas {
@@ -111,7 +133,10 @@ h1 {
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
     animation: fadeIn 0.5s ease-in;
     transition: opacity 0.5s ease-out;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
     backdrop-filter: blur(20px);
 }
 
@@ -121,6 +146,7 @@ h1 {
     height: 100%;
     overflow: hidden;
     z-index: 1;
+    pointer-events: none;
 }
 
 .particle {
@@ -218,6 +244,7 @@ h1 {
     position: relative;
     display: inline-block;
     align-self: flex-start;
+    z-index: 5;
 }
 
 .badge-glow {
@@ -228,7 +255,6 @@ h1 {
     filter: blur(10px);
     opacity: 0.5;
     animation: pulse 2s ease-in-out infinite;
-    margin-bottom: 16px;
 }
 
 .badge-text {
@@ -449,6 +475,8 @@ h1 {
     overflow: hidden;
     transition: all 0.3s ease;
     font-family: Verdana, sans-serif;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .btn-bg {
@@ -680,6 +708,8 @@ button {
     animation: fadeIn 0.3s ease-in;
     border: 3px solid rgba(0, 0, 0, 0.5);
     box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.9);
+    overflow: hidden;
+    overscroll-behavior: contain;
 }
 
 .modal.show {
@@ -696,6 +726,8 @@ button {
     max-height: 440px;
     overflow-y: auto;
     overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
     animation: slideDown 0.4s ease-out;
 }
 
@@ -732,6 +764,8 @@ button {
     line-height: 40px;
     transition: all 0.3s ease;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .close-btn:hover {
@@ -892,6 +926,8 @@ button {
     text-transform: uppercase;
     letter-spacing: 2px;
     min-width: unset;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .display-btn:hover {
@@ -916,17 +952,126 @@ button {
 
     .startscreen {
         width: 100%;
+        height: 100vh;
+        height: 100dvh;
+        height: -webkit-fill-available;
+        min-height: -webkit-fill-available;
+        border-radius: 0;
+        top: 0;
+        left: 0;
+        transform: none;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+        touch-action: pan-y;
+    }
+
+    .startscreen-container {
+        grid-template-columns: 1fr;
+        grid-auto-rows: auto;
+        height: 100%;
+        min-height: 100%;
+        align-content: start;
+    }
+
+    .left-panel {
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 140, 0, 0.2);
+        padding: 25px 15px 20px 15px;
+        gap: 15px;
+        min-height: auto;
+    }
+
+    .right-panel {
+        padding: 20px 15px;
+        gap: 15px;
+        min-height: auto;
+    }
+
+    .logo-section {
+        margin-top: 0;
+    }
+
+    .logo-wrapper {
+        gap: 12px;
+    }
+
+    .title-word {
+        font-size: 30px;
+    }
+
+    .pepe-image {
+        height: 100px;
+        margin-left: 0;
+        margin-top: 0;
+    }
+
+    .game-subtitle {
+        font-size: 16px;
+    }
+
+    .game-stats {
+        gap: 10px;
+    }
+
+    .stat-item {
+        padding: 8px 10px;
+    }
+
+    .stat-label,
+    .stat-value {
+        font-size: 16px;
+    }
+
+    .game-menu {
+        gap: 10px;
+    }
+
+    .menu-header h3 {
+        font-size: 16px;
+    }
+
+    .menu-btn {
+        padding: 12px 16px;
+    }
+
+    .btn-text {
+        font-size: 16px;
+    }
+
+    .version-info {
+        padding: 10px;
+    }
+
+    .version-text,
+    .status-text {
+        font-size: 16px;
     }
 
     .modal {
-        width: 100%;
+        width: 100vw;
         height: 100vh;
+        height: 100dvh;
+        height: -webkit-fill-available;
+        top: 0;
+        left: 0;
+        transform: none;
+        align-items: flex-start;
+        padding: 20px 0;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+        touch-action: pan-y;
     }
 
     .modal-content {
         width: 90%;
         max-width: 90%;
-        max-height: 90vh;
+        height: auto;
+        max-height: calc(100vh - 40px);
+        max-height: calc(100dvh - 40px);
+        max-height: calc(-webkit-fill-available - 40px);
+        margin: auto;
     }
 
     .modal-header h2 {
@@ -941,52 +1086,67 @@ button {
         flex-direction: column;
     }
 
-    .key-item {
-        min-width: 100%;
-    }
-
     .display-controls {
         flex-direction: column;
     }
 }
 
-@media only screen and (max-width: 900px) and (orientation: landscape) {
-    h1 {
-        display: none !important;
-    }
-}
-
-@media only screen and (max-height: 480px) {
-    canvas {
-        height: 100vh;
-        width: auto;
-        max-width: 100vw;
-    }
-
-    .startscreen {
-        height: 100vh;
-    }
-
-    .modal {
-        height: 100vh;
-    }
-
-    .modal-content {
-        max-height: 90vh;
-    }
-}
-
 @media only screen and (max-width: 480px) {
-    .modal-header {
-        padding: 15px 20px;
+    .left-panel,
+    .right-panel {
+        padding: 20px 12px 15px 12px;
+        gap: 12px;
+    }
+
+    .badge-text {
+        font-size: 14px;
+        padding: 5px 12px;
+    }
+
+    .logo-wrapper {
+        gap: 10px;
+    }
+
+    .title-word {
+        font-size: 26px;
+        letter-spacing: 2px;
+    }
+
+    .pepe-image {
+        height: 85px;
+    }
+
+    .game-subtitle {
+        font-size: 16px;
+        letter-spacing: 2px;
+    }
+
+    .game-stats {
+        gap: 8px;
+    }
+
+    .stat-item {
+        padding: 6px 8px;
+    }
+
+    .stat-icon {
+        font-size: 18px;
+    }
+
+    .game-menu {
+        gap: 8px;
+    }
+
+    .menu-btn {
+        padding: 10px 14px;
+    }
+
+    .version-info {
+        padding: 8px;
     }
 
     .modal-header h2 {
         font-size: 24px;
-    }
-
-    .modal-body {
-        padding: 20px;
     }
 
     .modal-body h3 {
@@ -995,8 +1155,6 @@ button {
 
     .key {
         font-size: 20px;
-        padding: 8px 15px;
-        min-width: 60px;
     }
 
     .action {
@@ -1010,6 +1168,140 @@ button {
     .display-btn {
         font-size: 16px;
         padding: 12px 20px;
+    }
+}
+
+@media only screen and (max-width: 390px) {
+    .left-panel,
+    .right-panel {
+        padding: 12px 10px;
+        gap: 10px;
+    }
+
+    .logo-wrapper {
+        gap: 8px;
+    }
+
+    .title-word {
+        font-size: 24px;
+        letter-spacing: 1px;
+    }
+
+    .pepe-image {
+        height: 75px;
+    }
+
+    .game-stats {
+        gap: 6px;
+    }
+
+    .stat-item {
+        padding: 5px 6px;
+        gap: 8px;
+    }
+
+    .stat-icon {
+        font-size: 16px;
+        width: 24px;
+    }
+
+    .game-menu {
+        gap: 6px;
+    }
+
+    .menu-btn {
+        padding: 9px 12px;
+    }
+
+    .btn-icon {
+        font-size: 16px;
+    }
+
+    .btn-text {
+        font-size: 16px;
+        letter-spacing: 1px;
+    }
+}
+
+@media only screen and (max-width: 320px) {
+    .left-panel,
+    .right-panel {
+        padding: 10px 8px;
+        gap: 8px;
+    }
+
+    .logo-wrapper {
+        gap: 6px;
+    }
+
+    .title-word {
+        font-size: 22px;
+        letter-spacing: 0.5px;
+    }
+
+    .pepe-image {
+        height: 65px;
+    }
+
+    .game-subtitle {
+        font-size: 16px;
+        letter-spacing: 1px;
+    }
+
+    .stat-item {
+        padding: 4px 6px;
+        gap: 6px;
+    }
+
+    .stat-icon {
+        width: 20px;
+    }
+
+    .game-menu {
+        gap: 5px;
+    }
+
+    .menu-btn {
+        padding: 8px 10px;
+    }
+
+    .btn-content {
+        gap: 6px;
+    }
+
+    .version-info {
+        padding: 6px;
+    }
+}
+
+@media only screen and (max-width: 900px) and (orientation: landscape) {
+    h1 {
+        display: none !important;
+    }
+}
+
+@media only screen and (max-height: 480px) {
+    canvas {
+        max-height: 90vh;
+        width: auto;
+        max-width: 100vw;
+    }
+
+    .startscreen {
+        height: auto;
+        min-height: 100vh;
+    }
+
+    .modal {
+        height: 100vh;
+        height: 100dvh;
+        height: -webkit-fill-available;
+    }
+
+    .modal-content {
+        max-height: calc(100vh - 40px);
+        max-height: calc(100dvh - 40px);
+        max-height: calc(-webkit-fill-available - 40px);
     }
 }
 

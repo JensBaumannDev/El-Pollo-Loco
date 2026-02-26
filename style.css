@@ -30,7 +30,7 @@ canvas {
 }
 
 h1 {
-    font-family: 'zabras', 'Times New Roman', Times, serif;
+    font-family: Verdana, sans-serif;
     font-size: clamp(40px, 12vw, 160px);
     letter-spacing: 10px;
     margin: 0;
@@ -40,7 +40,7 @@ h1 {
         3px 3px 0px #FF8C00,
         6px 6px 0px #FF4500,
         9px 9px 20px rgba(0, 0, 0, 0.8);
-    display: block;
+    display: none;
     animation: fadeInCanvas 0.5s ease-in;
 }
 
@@ -102,102 +102,497 @@ h1 {
     height: 480px;
     width: 720px;
     z-index: 10;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border: 5px solid rgb(70, 32, 2);
+    background: linear-gradient(135deg, #1a0e0a 0%, #2d1810 50%, #1a0e0a 100%);
+    border: 1px solid rgba(255, 140, 0, 0.3);
+    border-radius: 12px;
+    box-shadow:
+        0 0 60px rgba(255, 140, 0, 0.2),
+        0 20px 60px rgba(0, 0, 0, 0.9),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
     animation: fadeIn 0.5s ease-in;
     transition: opacity 0.5s ease-out;
     overflow: hidden;
+    backdrop-filter: blur(20px);
 }
 
-.startscreen::before {
-    content: '';
+.particles {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image:
-        linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.4)),
-        url('img/9_intro_outro_screens/start/startscreen_1.png');
-    background-size: cover;
-    background-position: center;
-    filter: blur(3px);
-    z-index: -1;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1;
 }
 
-.startscreen-content {
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: linear-gradient(45deg, #FFD700, #FF8C00);
+    border-radius: 50%;
+    opacity: 0;
+    animation: float 8s infinite;
+    box-shadow: 0 0 10px rgba(255, 140, 0, 0.5);
+}
+
+.particle:nth-child(1) {
+    left: 10%;
+    animation-delay: 0s;
+    animation-duration: 6s;
+}
+
+.particle:nth-child(2) {
+    left: 30%;
+    animation-delay: 1s;
+    animation-duration: 8s;
+}
+
+.particle:nth-child(3) {
+    left: 50%;
+    animation-delay: 2s;
+    animation-duration: 7s;
+}
+
+.particle:nth-child(4) {
+    left: 70%;
+    animation-delay: 1.5s;
+    animation-duration: 9s;
+}
+
+.particle:nth-child(5) {
+    left: 90%;
+    animation-delay: 0.5s;
+    animation-duration: 6.5s;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(100vh) scale(0);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-100px) scale(1);
+        opacity: 0;
+    }
+}
+
+.startscreen-container {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 100%;
+    z-index: 2;
+}
+
+.left-panel {
+    padding: 30px 30px 40px 30px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 30px;
-    width: 100%;
-    padding: 20px;
-    box-sizing: border-box;
-    animation: slideUp 0.8s ease-out 0.2s both;
+    justify-content: space-between;
+    border-right: 1px solid rgba(255, 140, 0, 0.2);
+    background: linear-gradient(135deg, rgba(255, 140, 0, 0.05) 0%, transparent 100%);
+    animation: slideInLeft 0.8s ease-out;
 }
 
-.game-logo {
-    text-align: center;
-    padding: 15px 20px;
-    background: linear-gradient(135deg, rgba(255, 140, 0, 0.2), rgba(255, 69, 0, 0.2));
-    border-radius: 15px;
-    border: 2px solid rgba(255, 140, 0, 0.4);
-    box-shadow: 0 0 30px rgba(255, 140, 0, 0.25);
-    backdrop-filter: blur(5px);
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
-.game-logo h2 {
-    font-family: 'zabras', 'Times New Roman', Times, serif;
-    font-size: 60px;
-    margin: 0;
+.game-badge {
+    position: relative;
+    display: inline-block;
+    align-self: flex-start;
+}
+
+.badge-glow {
+    position: absolute;
+    inset: -5px;
+    background: linear-gradient(45deg, #FF8C00, #FFD700);
+    border-radius: 20px;
+    filter: blur(10px);
+    opacity: 0.5;
+    animation: pulse 2s ease-in-out infinite;
+    margin-bottom: 16px;
+}
+
+.badge-text {
+    position: relative;
+    display: block;
+    padding: 6px 16px;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, rgba(255, 140, 0, 0.2), rgba(255, 215, 0, 0.2));
+    border: 1px solid rgba(255, 215, 0, 0.5);
+    border-radius: 20px;
+    font-family: Verdana, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
     color: #FFD700;
-    text-shadow:
-        2px 2px 0px #FF8C00,
-        4px 4px 0px #FF4500,
-        6px 6px 15px rgba(0, 0, 0, 0.8);
-    letter-spacing: 6px;
-    animation: glow 2s ease-in-out infinite;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
 }
 
-.subtitle {
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.6;
+        transform: scale(1);
+    }
+}
+
+.logo-section {
+    margin-top: -20px;
+}
+
+.logo-wrapper {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.title-container {
+    flex: 1;
+}
+
+.game-title {
     font-family: 'zabras', 'Times New Roman', Times, serif;
-    font-size: 18px;
-    color: #FFF;
-    margin: 8px 0 0 0;
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9);
-    letter-spacing: 2px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: -5px;
+}
+
+.title-word {
+    display: block;
+    font-size: 42px;
+    font-weight: 900;
+    background: linear-gradient(135deg, #FFD700 0%, #FF8C00 50%, #FFD700 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 4px;
+    line-height: 0.9;
+    animation: shimmer 3s linear infinite;
+    text-shadow: 0 0 30px rgba(255, 140, 0, 0.5);
+}
+
+@keyframes shimmer {
+    to {
+        background-position: 200% center;
+    }
+}
+
+.title-underline {
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #FF8C00, transparent);
+    border-radius: 2px;
+    margin-top: 8px;
+    animation: expandWidth 1s ease-out 0.5s both;
+}
+
+@keyframes expandWidth {
+    from {
+        width: 0;
+    }
+
+    to {
+        width: 100%;
+    }
+}
+
+.pepe-image {
+    height: 160px;
+    width: auto;
+    filter: drop-shadow(0 0 20px rgba(255, 140, 0, 0.5));
+    margin-left: -15px;
+    margin-top: -40px;
+    margin-right: 40px;
+}
+
+.game-subtitle {
+    font-family: Verdana, sans-serif;
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeIn 0.6s ease-out 0.8s forwards;
+}
+
+.game-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    opacity: 0;
+    animation: fadeIn 0.6s ease-out 1s forwards;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    background: rgba(255, 140, 0, 0.05);
+    border: 1px solid rgba(255, 140, 0, 0.15);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.stat-item:hover {
+    background: rgba(255, 140, 0, 0.1);
+    border-color: rgba(255, 140, 0, 0.3);
+    transform: translateX(5px);
+}
+
+.stat-icon {
+    font-size: 20px;
+    width: 30px;
+    text-align: center;
+}
+
+.stat-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.stat-label {
+    font-family: Verdana, sans-serif;
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.stat-value {
+    font-family: Verdana, sans-serif;
+    font-size: 16px;
+    color: #FFD700;
+    font-weight: bold;
+}
+
+.right-panel {
+    padding: 40px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    animation: slideInRight 0.8s ease-out;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.menu-header {
+    margin-bottom: 10px;
+}
+
+.menu-header h3 {
+    font-family: Verdana, sans-serif;
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0 0 8px 0;
+    letter-spacing: 3px;
+    font-weight: normal;
+}
+
+.menu-line {
+    height: 2px;
+    background: linear-gradient(90deg, rgba(255, 140, 0, 0.5), transparent);
+    border-radius: 2px;
 }
 
 .game-menu {
     display: flex;
     flex-direction: column;
+    gap: 12px;
+}
+
+.menu-btn {
+    position: relative;
+    padding: 16px 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    font-family: Verdana, sans-serif;
+}
+
+.btn-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255, 140, 0, 0.1), rgba(255, 140, 0, 0.05));
+    border: 1px solid rgba(255, 140, 0, 0.3);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-content {
+    position: relative;
+    display: flex;
     align-items: center;
-    gap: 15px;
-    padding: 20px 30px;
-    background: rgba(0, 0, 0, 0.6);
-    border-radius: 12px;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(10px);
+    gap: 12px;
+    z-index: 1;
+}
+
+.btn-icon {
+    font-size: 18px;
+    transition: transform 0.3s ease;
+}
+
+.btn-text {
+    font-size: 16px;
+    font-weight: bold;
+    color: #FFD700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+.btn-shine {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-play .btn-bg {
+    background: linear-gradient(135deg, rgba(255, 140, 0, 0.3), rgba(255, 69, 0, 0.2));
+    border: 2px solid rgba(255, 215, 0, 0.6);
+    box-shadow:
+        0 0 20px rgba(255, 140, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-play .btn-text {
+    font-size: 16px;
+    color: #FFF;
+    text-shadow: 0 0 15px rgba(255, 140, 0, 0.8);
+}
+
+.btn-play:hover .btn-bg {
+    background: linear-gradient(135deg, rgba(255, 140, 0, 0.5), rgba(255, 69, 0, 0.3));
+    border-color: #FFD700;
+    box-shadow:
+        0 0 30px rgba(255, 140, 0, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.menu-btn:hover .btn-bg {
+    background: linear-gradient(135deg, rgba(255, 140, 0, 0.2), rgba(255, 140, 0, 0.1));
+    border-color: rgba(255, 215, 0, 0.6);
+    transform: translateX(8px);
+}
+
+.menu-btn:hover .btn-icon {
+    transform: scale(1.2) rotate(5deg);
+}
+
+.menu-btn:hover .btn-shine {
+    left: 100%;
+}
+
+.menu-btn:active {
+    transform: scale(0.98);
+}
+
+.version-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 140, 0, 0.2);
+    border-radius: 8px;
+    opacity: 0;
+    animation: fadeIn 0.6s ease-out 1.2s forwards;
+}
+
+.version-text {
+    font-family: Verdana, sans-serif;
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 1px;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: #00ff88;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #00ff88;
+    animation: blink 2s ease-in-out infinite;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.3;
+    }
+}
+
+.status-text {
+    font-family: Verdana, sans-serif;
+    font-size: 16px;
+    color: #00ff88;
+    letter-spacing: 1px;
+    font-weight: bold;
 }
 
 /*#endregion*/
 
 /*#region BUTTONS*/
 button {
-    font-family: 'zabras', 'Times New Roman', Times, serif;
-    font-size: 22px;
-    padding: 12px 40px;
-    border: none;
-    border-radius: 8px;
+    font-family: Verdana, sans-serif;
     cursor: pointer;
     transition: all 0.3s ease;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    min-width: 240px;
     position: relative;
     overflow: hidden;
 }
@@ -210,6 +605,12 @@ button {
         0 4px 15px rgba(255, 140, 0, 0.4),
         inset 0 -2px 10px rgba(0, 0, 0, 0.3);
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    font-size: 22px;
+    padding: 12px 40px;
+    border-radius: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    min-width: 240px;
 }
 
 .btn-primary:hover {
@@ -232,6 +633,12 @@ button {
     color: #333;
     border: 2px solid rgba(0, 0, 0, 0.2);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    font-size: 22px;
+    padding: 12px 40px;
+    border-radius: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    min-width: 240px;
 }
 
 .btn-secondary:hover {
@@ -302,7 +709,7 @@ button {
 }
 
 .modal-header h2 {
-    font-family: 'zabras', 'Times New Roman', Times, serif;
+    font-family: Verdana, sans-serif;
     font-size: 36px;
     margin: 0;
     color: #FFD700;
@@ -337,7 +744,7 @@ button {
 }
 
 .modal-body h3 {
-    font-family: 'zabras', 'Times New Roman', Times, serif;
+    font-family: Verdana, sans-serif;
     font-size: 28px;
     color: #FFF;
     margin: 0 0 20px 0;
@@ -373,7 +780,7 @@ button {
 }
 
 .key {
-    font-family: 'zabras', 'Times New Roman', Times, serif;
+    font-family: Verdana, sans-serif;
     font-size: 24px;
     background: linear-gradient(135deg, #FF8C00, #FF4500);
     color: white;
@@ -387,7 +794,7 @@ button {
 }
 
 .action {
-    font-family: 'zabras', 'Times New Roman', Times, serif;
+    font-family: Verdana, sans-serif;
     font-size: 16px;
     color: #FFF;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
@@ -402,7 +809,7 @@ button {
 }
 
 .setting-item label {
-    font-family: 'zabras', 'Times New Roman', Times, serif;
+    font-family: Verdana, sans-serif;
     font-size: 24px;
     color: #FFD700;
     display: block;
@@ -458,7 +865,7 @@ button {
 }
 
 .volume-value {
-    font-family: 'zabras', 'Times New Roman', Times, serif;
+    font-family: Verdana, sans-serif;
     font-size: 20px;
     color: #FFF;
     min-width: 50px;
@@ -473,7 +880,7 @@ button {
 
 .display-btn {
     flex: 1;
-    font-family: 'zabras', 'Times New Roman', Times, serif;
+    font-family: Verdana, sans-serif;
     font-size: 20px;
     padding: 15px 30px;
     background: rgba(255, 255, 255, 0.1);
@@ -593,7 +1000,7 @@ button {
     }
 
     .action {
-        font-size: 14px;
+        font-size: 16px;
     }
 
     .setting-item label {

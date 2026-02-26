@@ -6,7 +6,6 @@ let globalVolume = 0.5;
 function updateCanvasSize() {
     canvas = document.getElementById('canvas');
     
-    // Set default resolution
     canvas.width = 720;
     canvas.height = 480;
 }
@@ -64,7 +63,6 @@ window.addEventListener("keyup", (keyevent) => {
 });
 
 window.addEventListener('DOMContentLoaded', function () {
-    // Initialize canvas size immediately
     updateCanvasSize();
     
     document.getElementById('startBtn').addEventListener('click', startGame);

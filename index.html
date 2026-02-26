@@ -34,15 +34,100 @@
     <h1>El Pollo Loco</h1>
 
     <div class="startscreen">
-        <div class="startscreen-content">
-            <div class="game-logo">
-                <h2>El Pollo Loco</h2>
-                <p class="subtitle">Fight the Crazy Chickens!</p>
+        <div class="particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+
+        <div class="startscreen-container">
+            <div class="left-panel">
+                <div class="game-badge">
+                    <div class="badge-glow"></div>
+                    <span class="badge-text">2026 EDITION</span>
+                </div>
+
+                <div class="logo-section">
+                    <div class="logo-wrapper">
+                        <div class="title-container">
+                            <h2 class="game-title">
+                                <span class="title-word">EL</span>
+                                <span class="title-word">POLLO</span>
+                                <span class="title-word">LOCO</span>
+                            </h2>
+                        </div>
+                        <img src="img/2_character_pepe/2_walk/W-21.png" alt="Pepe" class="pepe-image">
+                    </div>
+                    <div class="title-underline"></div>
+                </div>
+
+                <div class="game-stats">
+                    <div class="stat-item">
+                        <div class="stat-icon">🎮</div>
+                        <div class="stat-info">
+                            <span class="stat-label">Genre</span>
+                            <span class="stat-value">Action Adventure</span>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon">⚔️</div>
+                        <div class="stat-info">
+                            <span class="stat-label">Difficulty</span>
+                            <span class="stat-value">Challenging</span>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon">🏆</div>
+                        <div class="stat-info">
+                            <span class="stat-label">Mission</span>
+                            <span class="stat-value">Defeat Boss</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="game-menu">
-                <button type="button" class="btn-primary" id="startBtn">Start Game</button>
-                <button type="button" class="btn-secondary" id="instructionsBtn">Instructions</button>
-                <button type="button" class="btn-secondary" id="settingsBtn">Settings</button>
+
+            <div class="right-panel">
+                <div class="menu-header">
+                    <h3>MAIN MENU</h3>
+                    <div class="menu-line"></div>
+                </div>
+
+                <div class="game-menu">
+                    <button type="button" class="menu-btn btn-play" id="startBtn">
+                        <span class="btn-bg"></span>
+                        <span class="btn-content">
+                            <span class="btn-icon">▶</span>
+                            <span class="btn-text">PLAY NOW</span>
+                        </span>
+                        <span class="btn-shine"></span>
+                    </button>
+
+                    <button type="button" class="menu-btn btn-instructions" id="instructionsBtn">
+                        <span class="btn-bg"></span>
+                        <span class="btn-content">
+                            <span class="btn-icon">📋</span>
+                            <span class="btn-text">HOW TO PLAY</span>
+                        </span>
+                    </button>
+
+                    <button type="button" class="menu-btn btn-settings" id="settingsBtn">
+                        <span class="btn-bg"></span>
+                        <span class="btn-content">
+                            <span class="btn-icon">⚙️</span>
+                            <span class="btn-text">SETTINGS</span>
+                        </span>
+                    </button>
+                </div>
+
+                <div class="version-info">
+                    <span class="version-text">Version 1.0.0</span>
+                    <div class="status-indicator">
+                        <span class="status-dot"></span>
+                        <span class="status-text">READY</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

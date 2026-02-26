@@ -544,6 +544,12 @@ button {
     }
 }
 
+@media only screen and (orientation: landscape) {
+    h1 {
+        display: none !important;
+    }
+}
+
 @media only screen and (max-height: 480px) {
     canvas {
         height: 100vh;

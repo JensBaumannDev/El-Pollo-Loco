@@ -100,7 +100,7 @@ class Character extends MovableObject {
                 this.world.newSound.play();
             }
 
-            this.world.camera_x = -this.x + 100;
+            this.world.camera_x = Math.min(0, -this.x + 100);
         }, 1000 / 60);
 
         setInterval(() => {

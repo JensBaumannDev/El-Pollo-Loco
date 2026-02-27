@@ -32,7 +32,7 @@ function initClouds() {
 function initEnemies() {
     let enemies = [];
     for (let i = 0; i < 10; i++) {
-        enemies.push(new Chicken());
+        enemies.push(new Chicken()); // world wird später gesetzt
     }
     enemies.push(new Endboss());
     return enemies;

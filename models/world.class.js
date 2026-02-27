@@ -48,6 +48,7 @@ class World {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
+        this.level.enemies.forEach(e => { if (e instanceof Chicken) e.world = this; });
         this.totalCoins = this.level.coins.length;
         this.coinStatusBar.setPercentage(0);
         this.draw();
@@ -64,23 +65,44 @@ class World {
         setInterval(() => {
             this.checkCollisions();
             this.checkThrowObjects();
-        }, 200);
+        }, 1000 / 60);
     }
 
     checkThrowObjects() {
-        if (this.keyboard.f) {
+        if (this.keyboard.f && !this.fKeyPressed) {
             let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
             this.throwableObjects.push(bottle);
+            this.fKeyPressed = true;
+        }
+        if (!this.keyboard.f) {
+            this.fKeyPressed = false;
         }
     }
 
     checkCollisions() {
-        this.level.enemies.forEach((enemy) => {
-            if (this.character.isColliding(enemy) && !this.character.isHurt()) {
+        let killedChicken = false;
+        let gotHit = false;
+        for (const enemy of this.level.enemies) {
+            if (enemy.isDead || !this.character.isColliding(enemy)) continue;
+            if (
+                enemy instanceof Chicken &&
+                this.character.speedY < 0 &&
+                (this.character.y + this.character.height - this.character.offset.bottom) < (enemy.y + enemy.height / 2)
+            ) {
+                enemy.die();
+                killedChicken = true;
+                this.newSound.src = this.mySounds.chicken.dead;
+                this.newSound.play();
+            } else if (!this.character.isHurt() && !gotHit) {
                 this.character.hit();
                 this.statusBar.setPercentage(this.character.energy);
+                gotHit = true;
             }
-        });
+        }
+        if (killedChicken) {
+            if (this.character.y > 180) this.character.y = 180;
+            this.character.speedY = 12;
+        }
 
         this.level.coins.forEach((coin, index) => {
             if (this.character.isColliding(coin)) {

@@ -98,7 +98,7 @@ class World {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         this.ctx.translate(this.camera_x, 0);
-        this.addObjectsToMap(this.level.backgroundObjects);
+        this.addBackgroundObjectsWithParallax(this.level.backgroundObjects);
         this.addObjectsToMap(this.level.clouds);
         this.ctx.translate(-this.camera_x, 0);
         this.addToMap(this.statusBar);
@@ -122,6 +122,20 @@ class World {
     addObjectsToMap(objects) {
         objects.forEach(o => {
             this.addToMap(o);
+        });
+    }
+
+    addBackgroundObjectsWithParallax(objects) {
+        objects.forEach(bgObject => {
+            if (bgObject.parallaxFactor !== 1) {
+                this.ctx.translate(-this.camera_x, 0);
+                this.ctx.translate(this.camera_x * bgObject.parallaxFactor, 0);
+                this.addToMap(bgObject);
+                this.ctx.translate(-this.camera_x * bgObject.parallaxFactor, 0);
+                this.ctx.translate(this.camera_x, 0);
+            } else {
+                this.addToMap(bgObject);
+            }
         });
     }
 

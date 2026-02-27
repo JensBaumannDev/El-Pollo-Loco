@@ -12,10 +12,10 @@ function initBackground() {
         let suffix = (Math.abs(index) % 2 === 0) ? '1' : '2';
 
         backgroundObjects.push(
-            new BackgroundObject('img/5_background/layers/air.png', x),
-            new BackgroundObject(`img/5_background/layers/3_third_layer/${suffix}.png`, x),
-            new BackgroundObject(`img/5_background/layers/2_second_layer/${suffix}.png`, x),
-            new BackgroundObject(`img/5_background/layers/1_first_layer/${suffix}.png`, x)
+            new BackgroundObject('img/5_background/layers/air.png', x, 0.1),
+            new BackgroundObject(`img/5_background/layers/3_third_layer/${suffix}.png`, x, 0.4),
+            new BackgroundObject(`img/5_background/layers/2_second_layer/${suffix}.png`, x, 0.7),
+            new BackgroundObject(`img/5_background/layers/1_first_layer/${suffix}.png`, x, 0.9)
         );
     }
     return backgroundObjects;

@@ -64,102 +64,83 @@ window.addEventListener("keyup", (keyevent) => {
 
 window.addEventListener('DOMContentLoaded', function () {
     updateCanvasSize();
-    
-    document.getElementById('startBtn').addEventListener('click', startGame);
-    document.getElementById('instructionsBtn').addEventListener('click', showInstructions);
-    document.getElementById('settingsBtn').addEventListener('click', showSettings);
-    document.getElementById('closeInstructions').addEventListener('click', closeInstructions);
-    document.getElementById('closeSettings').addEventListener('click', closeSettings);
-    
-    const volumeSlider = document.getElementById('volumeSlider');
-    const volumeValue = document.getElementById('volumeValue');
-    const savedVolume = parseFloat(localStorage.getItem('gameVolume'));
-    const initialVolume = Number.isFinite(savedVolume) ? savedVolume : 0.5;
-    volumeSlider.value = Math.round(initialVolume * 100);
-    volumeValue.textContent = volumeSlider.value + '%';
-    setGlobalVolume(initialVolume);
-    volumeSlider.addEventListener('input', function() {
-        volumeValue.textContent = this.value + '%';
-        setGlobalVolume(this.value / 100);
-    });
-
-    document.getElementById('normalModeBtn').addEventListener('click', setNormalMode);
-    document.getElementById('fullscreenModeBtn').addEventListener('click', setFullscreenMode);
-
-    document.getElementById('instructionsModal').addEventListener('click', function(e) {
-        if (e.target === this) closeInstructions();
-    });
-    document.getElementById('settingsModal').addEventListener('click', function(e) {
-        if (e.target === this) closeSettings();
-    });
+    setupMenuListeners();
+    setupVolumeControl();
+    setupFullscreenControls();
 });
 
-function showInstructions() {
-    document.getElementById('instructionsModal').classList.add('show');
+function setupMenuListeners() {
+    const bind = (id, fn) => document.getElementById(id).addEventListener('click', fn);
+    bind('startBtn', startGame);
+    bind('instructionsBtn', () => document.getElementById('instructionsModal').classList.add('show'));
+    bind('settingsBtn', () => document.getElementById('settingsModal').classList.add('show'));
+    bind('closeInstructions', () => document.getElementById('instructionsModal').classList.remove('show'));
+    bind('closeSettings', () => document.getElementById('settingsModal').classList.remove('show'));
+
+    document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', e => {
+        if (e.target === m) m.classList.remove('show');
+    }));
 }
 
-function closeInstructions() {
-    document.getElementById('instructionsModal').classList.remove('show');
-}
+function setupVolumeControl() {
+    const slider = document.getElementById('volumeSlider');
+    const label = document.getElementById('volumeValue');
+    let vol = parseFloat(localStorage.getItem('gameVolume'));
+    vol = Number.isFinite(vol) ? vol : 0.5;
+    
+    slider.value = Math.round(vol * 100);
+    label.textContent = slider.value + '%';
+    setGlobalVolume(vol);
 
-function showSettings() {
-    document.getElementById('settingsModal').classList.add('show');
-}
-
-function closeSettings() {
-    document.getElementById('settingsModal').classList.remove('show');
+    slider.addEventListener('input', function() {
+        label.textContent = this.value + '%';
+        setGlobalVolume(this.value / 100);
+    });
 }
 
 function setGlobalVolume(volume) {
     globalVolume = Math.max(0, Math.min(1, volume));
     localStorage.setItem('gameVolume', globalVolume);
-    const audioElements = document.querySelectorAll('audio');
-    audioElements.forEach(audio => {
-        audio.volume = globalVolume;
+    document.querySelectorAll('audio').forEach(a => a.volume = globalVolume);
+    if (world && world.newSound) world.newSound.volume = globalVolume;
+}
+
+function setupFullscreenControls() {
+    const normBtn = document.getElementById('normalModeBtn');
+    const fullBtn = document.getElementById('fullscreenModeBtn');
+
+    normBtn.addEventListener('click', () => {
+        if (document.fullscreenElement) document.exitFullscreen();
+        normBtn.classList.add('active');
+        fullBtn.classList.remove('active');
     });
-    if (world && world.newSound) {
-        world.newSound.volume = globalVolume;
-    }
+
+    fullBtn.addEventListener('click', () => {
+        const el = document.documentElement;
+        (el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen).call(el);
+        fullBtn.classList.add('active');
+        normBtn.classList.remove('active');
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+        if (!document.fullscreenElement) {
+            normBtn.classList.add('active');
+            fullBtn.classList.remove('active');
+        }
+    });
 }
-
-function setNormalMode() {
-    if (document.fullscreenElement) {
-        document.exitFullscreen();
-    }
-    document.getElementById('normalModeBtn').classList.add('active');
-    document.getElementById('fullscreenModeBtn').classList.remove('active');
-}
-
-function setFullscreenMode() {
-    const docElement = document.documentElement;
-    if (docElement.requestFullscreen) {
-        docElement.requestFullscreen();
-    } else if (docElement.mozRequestFullScreen) {
-        docElement.mozRequestFullScreen();
-    } else if (docElement.webkitRequestFullscreen) {
-        docElement.webkitRequestFullscreen();
-    } else if (docElement.msRequestFullscreen) {
-        docElement.msRequestFullscreen();
-    }
-    document.getElementById('fullscreenModeBtn').classList.add('active');
-    document.getElementById('normalModeBtn').classList.remove('active');
-}
-
-document.addEventListener('fullscreenchange', function() {
-    if (!document.fullscreenElement) {
-        document.getElementById('normalModeBtn').classList.add('active');
-        document.getElementById('fullscreenModeBtn').classList.remove('active');
-    }
-});
-
 
 function startGame() {
     let startscreen = document.querySelector('.startscreen');
     startscreen.style.opacity = '0';
+    startscreen.style.pointerEvents = 'none';
 
     setTimeout(() => {
         startscreen.style.display = 'none';
-        document.querySelector('h1').style.display = 'block';
+        
+        let h1El = document.querySelector('h1');
+        if (h1El) h1El.style.display = 'block';
+        
         document.getElementById('canvas').style.display = 'block';
         init();
     }, 500);

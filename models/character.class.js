@@ -101,7 +101,7 @@ class Character extends MovableObject {
             }
 
             this.world.camera_x = Math.min(0, -this.x + 100);
-        }, 1000 / 60);
+        }, 1000 / 100);
 
         setInterval(() => {
             if (this.isDead()) {

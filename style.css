@@ -55,7 +55,7 @@ body {
 }
 
 .main-title {
-    display: block;
+    display: none;
 }
 
 canvas,

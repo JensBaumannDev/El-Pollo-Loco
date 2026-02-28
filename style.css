@@ -1,3 +1,16 @@
+:root {
+    --fs-title: 90px;
+    --fs-btn: 20px;
+    --fs-modal-h: 26px;
+    --fs-modal-body: 14px;
+    --fs-key: 22px;
+    --w-canvas: 720px;
+    --h-canvas: 480px;
+    --w-game-menu: 280px;
+    --gap-btn: 25px;
+    --pad-modal: 30px;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -19,9 +32,7 @@ body {
     align-items: center;
     justify-content: center;
     background-color: #1a1a1a;
-    background-image:
-        radial-gradient(circle, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.9) 100%),
-        url('img/game_background/mostafaelturkey36-desert-5112222_1920.png');
+    background-image: radial-gradient(circle, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.9) 100%), url('img/game_background/mostafaelturkey36-desert-5112222_1920.png');
     background-size: cover;
     background-position: center;
     overflow: hidden;
@@ -31,24 +42,26 @@ body {
 .startscreen-title,
 .main-title {
     font-family: 'zabras', sans-serif;
-    font-size: 90px;
+    font-size: var(--fs-title);
     color: #F39C12;
     margin: 0 0 25px 0;
-    text-shadow:
-        0 8px 0 #874913,
-        0 15px 25px rgba(0, 0, 0, 0.7);
+    text-shadow: 0 8px 0 #874913, 0 15px 25px rgba(0, 0, 0, 0.7);
     letter-spacing: 5px;
     line-height: 1;
 }
 
+.startscreen-title {
+    display: block;
+}
+
 .main-title {
-    display: none;
+    display: block;
 }
 
 canvas,
 .startscreen {
-    width: 720px;
-    height: 480px;
+    width: var(--w-canvas);
+    height: var(--h-canvas);
     border: 4px solid rgb(70, 32, 2);
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.464);
 }
@@ -85,19 +98,19 @@ canvas {
 .game-menu {
     display: flex;
     flex-direction: column;
-    gap: 25px;
-    width: 280px;
+    gap: var(--gap-btn);
+    width: var(--w-game-menu);
     margin-top: 10px;
 }
 
 .btn {
     font-family: Verdana, sans-serif;
     font-weight: bold;
-    font-size: 20px;
+    font-size: var(--fs-btn);
     color: white;
     background-color: #E67E22;
     border: none;
-    padding: 18px 0;
+    padding: var(--pad-modal) 0;
     border-radius: 10px;
     cursor: pointer;
     text-transform: uppercase;
@@ -135,7 +148,7 @@ canvas {
     border-radius: 12px;
     width: 480px;
     max-width: 90%;
-    padding: 30px;
+    padding: var(--pad-modal);
     color: #eee;
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9);
 }
@@ -151,7 +164,7 @@ canvas {
 
 .modal-header h2 {
     font-family: Verdana, sans-serif;
-    font-size: 26px;
+    font-size: var(--fs-modal-h);
     margin: 0;
     color: #E67E22;
     text-transform: uppercase;
@@ -175,7 +188,7 @@ canvas {
 
 .modal-body h3 {
     margin: 0 0 15px 0;
-    font-size: 14px;
+    font-size: var(--fs-modal-body);
     color: #c9aa88;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -199,7 +212,7 @@ canvas {
 
 .key {
     display: block;
-    font-size: 22px;
+    font-size: var(--fs-key);
     font-weight: bold;
     color: #E67E22;
     margin-bottom: 5px;
@@ -266,4 +279,132 @@ input[type=range] {
     background: #E67E22;
     color: #fff;
     border-color: #E67E22;
+}
+
+@media (max-width: 480px) {
+    :root {
+        --fs-title: 42px;
+        --fs-btn: 14px;
+        --w-canvas: 95vw;
+        --h-canvas: 60vh;
+        --gap-btn: 12px;
+        --pad-modal: 15px;
+    }
+
+    canvas,
+    .startscreen {
+        border: 3px solid rgb(70, 32, 2);
+        border-radius: 8px;
+    }
+
+    .btn {
+        box-shadow: 0 5px 0 #935116, 0 10px 10px rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+        width: 95vw;
+        padding: 15px;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+    .close-btn {
+        font-size: 28px;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+    :root {
+        --fs-title: 56px;
+        --fs-btn: 16px;
+        --w-canvas: 90vw;
+        --h-canvas: 70vh;
+        --gap-btn: 15px;
+        --pad-modal: 20px;
+    }
+
+    canvas,
+    .startscreen {
+        border: 3px solid rgb(70, 32, 2);
+        border-radius: 8px;
+        max-width: 600px;
+    }
+
+    .modal-content {
+        width: 90vw;
+        max-width: 500px;
+    }
+}
+
+@media (orientation: landscape) and (max-height: 700px) {
+    body {
+        height: 100svh;
+        -webkit-user-select: none;
+        overflow: hidden;
+    }
+
+    .main-title {
+        display: none !important;
+    }
+
+    :root {
+        --fs-title: 32px;
+        --fs-btn: 13px;
+    }
+
+    canvas,
+    .startscreen {
+        width: 85vw;
+        height: calc(100svh - 20px);
+        max-width: 1000px;
+        border: 2px solid rgb(70, 32, 2);
+        max-height: 95vh;
+        -webkit-touch-callout: none;
+    }
+
+    .startscreen {
+        padding: 5px 0;
+        -webkit-user-select: none;
+    }
+
+    .game-menu {
+        gap: 8px;
+        width: 90%;
+    }
+
+    .btn {
+        padding: 10px 0;
+        box-shadow: 0 3px 0 #935116, 0 5px 6px rgba(0, 0, 0, 0.3);
+        -webkit-appearance: none;
+        -webkit-border-radius: 10px;
+    }
+
+    .modal-content {
+        width: 80vw;
+        max-width: 450px;
+        padding: 12px;
+    }
+
+    .close-btn {
+        font-size: 24px;
+    }
+}
+
+@media (min-width: 769px) {
+
+    canvas,
+    .startscreen {
+        width: 720px;
+        height: 480px;
+        border: 4px solid rgb(70, 32, 2);
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.464);
+    }
+
+    .btn {
+        box-shadow: 0 8px 0 #935116, 0 15px 15px rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+        width: 480px;
+    }
 }

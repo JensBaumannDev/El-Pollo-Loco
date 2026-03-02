@@ -138,9 +138,6 @@ function startGame() {
     setTimeout(() => {
         startscreen.style.display = 'none';
 
-        let h1El = document.querySelector('h1');
-        if (h1El) h1El.style.display = 'block';
-
         document.getElementById('gameContainer').style.display = 'block';
         init();
     }, 500);

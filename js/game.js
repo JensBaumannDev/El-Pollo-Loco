@@ -5,7 +5,7 @@ var globalVolume = 0.4;
 
 function updateCanvasSize() {
     canvas = document.getElementById('canvas');
-    
+
     canvas.width = 720;
     canvas.height = 480;
 }
@@ -88,12 +88,12 @@ function setupVolumeControl() {
     const label = document.getElementById('volumeValue');
     let vol = parseFloat(localStorage.getItem('gameVolume'));
     vol = Number.isFinite(vol) ? vol : 0.4;
-    
+
     slider.value = Math.round(vol * 100);
     label.textContent = slider.value + '%';
     setGlobalVolume(vol);
 
-    slider.addEventListener('input', function() {
+    slider.addEventListener('input', function () {
         label.textContent = this.value + '%';
         setGlobalVolume(this.value / 100);
     });
@@ -137,10 +137,10 @@ function startGame() {
 
     setTimeout(() => {
         startscreen.style.display = 'none';
-        
+
         let h1El = document.querySelector('h1');
         if (h1El) h1El.style.display = 'block';
-        
+
         document.getElementById('gameContainer').style.display = 'block';
         init();
     }, 500);

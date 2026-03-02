@@ -124,6 +124,17 @@ class World {
                 this.playSound(this.mySounds.collectibles.collect);
             }
         });
+
+        this.throwableObjects.forEach((bottle, index) => {
+            for (const enemy of this.level.enemies) {
+                if (enemy instanceof Endboss && bottle.isColliding(enemy)) {
+                    enemy.hit();
+                    this.throwableObjects.splice(index, 1);
+                    this.playSound(this.mySounds.thowable.bottlebreak);
+                    break;
+                }
+            }
+        });
     }
 
     playSound(src) {

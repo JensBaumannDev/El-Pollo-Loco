@@ -104,8 +104,8 @@
                     <label for="volumeSlider">Volume</label>
                     <div class="volume-control">
                         <span class="volume-icon">🔊</span>
-                        <input type="range" id="volumeSlider" min="0" max="100" value="50">
-                        <span class="volume-value" id="volumeValue">50%</span>
+                        <input type="range" id="volumeSlider" min="0" max="100" value="40">
+                        <span class="volume-value" id="volumeValue">40%</span>
                     </div>
                 </div>
                 <div class="setting-item">
@@ -119,7 +119,13 @@
         </div>
     </div>
 
-    <canvas id="canvas"></canvas>
+    <div class="game-container" id="gameContainer" style="display: none;">
+        <canvas id="canvas"></canvas>
+        <div class="game-ui" id="gameUI">
+            <button class="game-ui-btn" id="gameSettingsBtn" title="Settings">⚙</button>
+            <button class="game-ui-btn" id="gameInstructionsBtn" title="Instructions">?</button>
+        </div>
+    </div>
 
 </body>
 

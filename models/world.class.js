@@ -12,7 +12,6 @@ class World {
     collectedCoins = 0;
     totalCoins = 0;
     collectedBottles = 0;
-    newSound = new Audio();
     mySounds = {
         character: {
             damage: 'audio/character/characterDamage.mp3',
@@ -95,8 +94,7 @@ class World {
             ) {
                 enemy.die();
                 killedChicken = true;
-                this.newSound.src = this.mySounds.chicken.dead;
-                this.newSound.play();
+                this.playSound(this.mySounds.chicken.dead);
             } else if (!this.character.isHurt() && !gotHit) {
                 this.character.hit();
                 this.statusBar.setPercentage(this.character.energy);
@@ -114,8 +112,7 @@ class World {
                 this.collectedCoins++;
                 let percentage = (this.collectedCoins / this.totalCoins) * 100;
                 this.coinStatusBar.setPercentage(percentage);
-                this.newSound.src = this.mySounds.collectibles.collect2;
-                this.newSound.play();
+                this.playSound(this.mySounds.collectibles.collect2);
             }
         });
 
@@ -124,10 +121,15 @@ class World {
                 this.level.collectableBottles.splice(index, 1);
                 this.collectedBottles++;
                 this.bottleStatusBar.setAmount(this.collectedBottles);
-                this.newSound.src = this.mySounds.collectibles.collect;
-                this.newSound.play();
+                this.playSound(this.mySounds.collectibles.collect);
             }
         });
+    }
+
+    playSound(src) {
+        let sound = new Audio(src);
+        sound.volume = globalVolume;
+        sound.play();
     }
 
     draw() {

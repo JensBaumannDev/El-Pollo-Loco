@@ -70,6 +70,7 @@ class Character extends MovableObject {
     world;
     framesanimated = 0;
     snoringSoundPlaying = false;
+    spaceKeyPressed = false;
 
     constructor() {
         super().loadImage('img/2_character_pepe/2_walk/W-21.png')
@@ -94,10 +95,14 @@ class Character extends MovableObject {
                 this.otherDirection = true;
             }
 
-            if (this.world.keyboard.SPACE && !this.isAboveGround()) {
+            if (this.world.keyboard.SPACE && !this.isAboveGround() && !this.spaceKeyPressed) {
                 this.jump();
-                this.world.newSound.src = this.world.mySounds.character.jump;
-                this.world.newSound.play();
+                this.world.playSound(this.world.mySounds.character.jump);
+                this.spaceKeyPressed = true;
+            }
+
+            if (!this.world.keyboard.SPACE) {
+                this.spaceKeyPressed = false;
             }
 
             this.world.camera_x = Math.min(0, -this.x + 100);
@@ -121,8 +126,7 @@ class Character extends MovableObject {
                     this.framesanimated++;
 
                     if (this.framesanimated === 101) {
-                        this.world.newSound.src = this.world.mySounds.character.snoring;
-                        this.world.newSound.play();
+                        this.world.playSound(this.world.mySounds.character.snoring);
                     }
 
                     if (this.framesanimated > 100) {

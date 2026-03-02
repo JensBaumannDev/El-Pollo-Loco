@@ -1,7 +1,7 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
-let globalVolume = 0.5;
+var globalVolume = 0.4;
 
 function updateCanvasSize() {
     canvas = document.getElementById('canvas');
@@ -14,7 +14,6 @@ function init() {
     updateCanvasSize();
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
-    world.newSound.volume = globalVolume;
 }
 
 window.addEventListener('resize', updateCanvasSize);
@@ -74,6 +73,8 @@ function setupMenuListeners() {
     bind('startBtn', startGame);
     bind('instructionsBtn', () => document.getElementById('instructionsModal').classList.add('show'));
     bind('settingsBtn', () => document.getElementById('settingsModal').classList.add('show'));
+    bind('gameInstructionsBtn', () => document.getElementById('instructionsModal').classList.add('show'));
+    bind('gameSettingsBtn', () => document.getElementById('settingsModal').classList.add('show'));
     bind('closeInstructions', () => document.getElementById('instructionsModal').classList.remove('show'));
     bind('closeSettings', () => document.getElementById('settingsModal').classList.remove('show'));
 
@@ -86,7 +87,7 @@ function setupVolumeControl() {
     const slider = document.getElementById('volumeSlider');
     const label = document.getElementById('volumeValue');
     let vol = parseFloat(localStorage.getItem('gameVolume'));
-    vol = Number.isFinite(vol) ? vol : 0.5;
+    vol = Number.isFinite(vol) ? vol : 0.4;
     
     slider.value = Math.round(vol * 100);
     label.textContent = slider.value + '%';
@@ -102,7 +103,6 @@ function setGlobalVolume(volume) {
     globalVolume = Math.max(0, Math.min(1, volume));
     localStorage.setItem('gameVolume', globalVolume);
     document.querySelectorAll('audio').forEach(a => a.volume = globalVolume);
-    if (world && world.newSound) world.newSound.volume = globalVolume;
 }
 
 function setupFullscreenControls() {
@@ -141,7 +141,7 @@ function startGame() {
         let h1El = document.querySelector('h1');
         if (h1El) h1El.style.display = 'block';
         
-        document.getElementById('canvas').style.display = 'block';
+        document.getElementById('gameContainer').style.display = 'block';
         init();
     }, 500);
 }

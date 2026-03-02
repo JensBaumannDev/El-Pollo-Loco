@@ -40,8 +40,7 @@ class MovableObject extends DrawableObject {
             this.lastHit = new Date().getTime();
         }
         if (this.world) {
-            this.world.newSound.src = this.world.mySounds.character.damage;
-            this.world.newSound.play();
+            this.world.playSound(this.world.mySounds.character.damage);
         }
     }
 

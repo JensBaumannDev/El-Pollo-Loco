@@ -27,7 +27,7 @@ body {
 }
 
 .main-title {
-    display: block;
+    display: none;
     font-family: 'Zabars', sans-serif;
     font-size: clamp(50px, 12vw, 140px);
     color: #FFD700;

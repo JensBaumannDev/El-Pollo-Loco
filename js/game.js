@@ -138,6 +138,15 @@ function startGame() {
     setTimeout(() => {
         startscreen.style.display = 'none';
 
+        let h1El = document.querySelector('h1');
+        if (h1El) {
+            if (window.innerHeight >= window.innerWidth) {
+                h1El.style.display = 'block';
+            } else {
+                h1El.style.display = 'none';
+            }
+        }
+
         document.getElementById('gameContainer').style.display = 'block';
         init();
     }, 500);

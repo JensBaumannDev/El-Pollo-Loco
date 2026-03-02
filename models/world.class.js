@@ -8,6 +8,7 @@ class World {
     statusBar = new StatusBar();
     coinStatusBar = new CoinStatusBar();
     bottleStatusBar = new BottleStatusBar();
+    endbossStatusBar = new EndbossStatusBar();
     throwableObjects = [];
     collectedCoins = 0;
     totalCoins = 0;
@@ -52,6 +53,9 @@ class World {
         this.totalCoins = this.level.coins.length;
         this.coinStatusBar.setPercentage(0);
         this.bottleStatusBar.setAmount(0);
+        if (this.level.endboss) {
+            this.endbossStatusBar.setPercentage(this.level.endboss.energy);
+        }
         this.draw();
         this.setWorld();
         this.run();
@@ -127,8 +131,16 @@ class World {
 
         this.throwableObjects.forEach((bottle, index) => {
             for (const enemy of this.level.enemies) {
-                if (enemy instanceof Endboss && bottle.isColliding(enemy)) {
-                    enemy.hit();
+                if (bottle.isColliding(enemy)) {
+                    if (enemy instanceof Endboss) {
+                        enemy.hit();
+                        this.endbossStatusBar.setPercentage(enemy.energy);
+                        if (enemy.energy <= 0) {
+                            enemy.die();
+                        }
+                    } else if (enemy instanceof Chicken) {
+                        enemy.hit();
+                    }
                     this.throwableObjects.splice(index, 1);
                     this.playSound(this.mySounds.thowable.bottlebreak);
                     break;
@@ -148,16 +160,19 @@ class World {
 
         this.ctx.translate(this.camera_x, 0);
         this.addBackgroundObjectsWithParallax(this.level.backgroundObjects);
-        this.addObjectsToMap(this.level.clouds);
+        this.addObjectsWithParallax(this.level.clouds, 0.4);
         this.ctx.translate(-this.camera_x, 0);
         this.addToMap(this.statusBar);
         this.addToMap(this.coinStatusBar);
         this.addToMap(this.bottleStatusBar);
+        if (this.level.endboss && this.isCharacterNearEndboss()) {
+            this.addToMap(this.endbossStatusBar);
+        }
         this.ctx.translate(this.camera_x, 0);
         this.addToMap(this.character);
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.coins);
-        this.addObjectsToMap(this.level.collectableBottles);
+        this.addObjectsWithParallax(this.level.collectableBottles, 1.0);
         this.addObjectsToMap(this.throwableObjects);
 
 
@@ -172,6 +187,16 @@ class World {
     addObjectsToMap(objects) {
         objects.forEach(o => {
             this.addToMap(o);
+        });
+    }
+
+    addObjectsWithParallax(objects, parallaxFactor) {
+        objects.forEach(o => {
+            this.ctx.translate(-this.camera_x, 0);
+            this.ctx.translate(this.camera_x * parallaxFactor, 0);
+            this.addToMap(o);
+            this.ctx.translate(-this.camera_x * parallaxFactor, 0);
+            this.ctx.translate(this.camera_x, 0);
         });
     }
 
@@ -207,6 +232,12 @@ class World {
         this.ctx.translate(mo.width, 0);
         this.ctx.scale(-1, 1);
         mo.x = mo.x * -1;
+    }
+
+    isCharacterNearEndboss() {
+        if (!this.level.endboss) return false;
+        const distance = Math.abs(this.character.x - this.level.endboss.x);
+        return distance < 1000;
     }
 
     flipImageBack(mo) {

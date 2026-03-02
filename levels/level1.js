@@ -2,7 +2,8 @@ const level1 = new Level(
     initEnemies(),
     initClouds(),
     initBackground(),
-    initCoins()
+    initCoins(),
+    initCollectableBottles()
 );
 
 function initBackground() {
@@ -32,7 +33,7 @@ function initClouds() {
 function initEnemies() {
     let enemies = [];
     for (let i = 0; i < 10; i++) {
-        enemies.push(new Chicken()); // world wird später gesetzt
+        enemies.push(new Chicken());
     }
     enemies.push(new Endboss());
     return enemies;
@@ -54,4 +55,13 @@ function initCoins() {
         coins.push(new Coin(x, y));
     }
     return coins;
+};
+
+function initCollectableBottles() {
+    let bottles = [];
+    for (let i = 0; i < 10; i++) {
+        let x = 300 + Math.random() * 6700;
+        bottles.push(new CollectableBottle(x, 350));
+    }
+    return bottles;
 };

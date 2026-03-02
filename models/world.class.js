@@ -11,6 +11,7 @@ class World {
     throwableObjects = [];
     collectedCoins = 0;
     totalCoins = 0;
+    collectedBottles = 0;
     newSound = new Audio();
     mySounds = {
         character: {
@@ -51,6 +52,7 @@ class World {
         this.level.enemies.forEach(e => { if (e instanceof Chicken) e.world = this; });
         this.totalCoins = this.level.coins.length;
         this.coinStatusBar.setPercentage(0);
+        this.bottleStatusBar.setAmount(0);
         this.draw();
         this.setWorld();
         this.run();
@@ -69,9 +71,11 @@ class World {
     }
 
     checkThrowObjects() {
-        if (this.keyboard.f && !this.fKeyPressed) {
+        if (this.keyboard.f && !this.fKeyPressed && this.collectedBottles > 0) {
             let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
             this.throwableObjects.push(bottle);
+            this.collectedBottles--;
+            this.bottleStatusBar.setAmount(this.collectedBottles);
             this.fKeyPressed = true;
         }
         if (!this.keyboard.f) {
@@ -114,6 +118,16 @@ class World {
                 this.newSound.play();
             }
         });
+
+        this.level.collectableBottles.forEach((bottle, index) => {
+            if (this.character.isColliding(bottle)) {
+                this.level.collectableBottles.splice(index, 1);
+                this.collectedBottles++;
+                this.bottleStatusBar.setAmount(this.collectedBottles);
+                this.newSound.src = this.mySounds.collectibles.collect;
+                this.newSound.play();
+            }
+        });
     }
 
     draw() {
@@ -130,6 +144,7 @@ class World {
         this.addToMap(this.character);
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.level.coins);
+        this.addObjectsToMap(this.level.collectableBottles);
         this.addObjectsToMap(this.throwableObjects);
 
 

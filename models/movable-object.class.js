@@ -30,7 +30,7 @@ class MovableObject extends DrawableObject {
     }
 
     hit() {
-        if (this.isDead) {
+        if (this.energy <= 0) {
             return;
         }
         this.energy -= 20;

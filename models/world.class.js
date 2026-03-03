@@ -1,6 +1,6 @@
 class World {
-    character = new Character();
-    level = level1;
+    character;
+    level;
     canvas;
     ctx;
     keyboard;
@@ -56,6 +56,16 @@ class World {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
+
+        this.character = new Character();
+        this.level = new Level(
+            initEnemies(),
+            initClouds(),
+            initBackground(),
+            initCoins(),
+            initCollectableBottles()
+        );
+
         this.level.enemies.forEach(e => { e.world = this; });
         this.totalCoins = this.level.coins.length;
         this.coinStatusBar.setPercentage(0);
@@ -72,8 +82,39 @@ class World {
 
     start() {
         this.gameRunning = true;
+        this.startAllAnimations();
         this.draw();
         this.run();
+    }
+
+    startAllAnimations() {
+        if (this.character.startAnimations) {
+            this.character.startAnimations();
+        }
+
+        if (this.level && this.level.enemies) {
+            this.level.enemies.forEach(enemy => {
+                if (enemy.startAnimations) {
+                    enemy.startAnimations();
+                }
+            });
+        }
+
+        if (this.level && this.level.clouds) {
+            this.level.clouds.forEach(cloud => {
+                if (cloud.startAnimations) {
+                    cloud.startAnimations();
+                }
+            });
+        }
+
+        if (this.level && this.level.coins) {
+            this.level.coins.forEach(coin => {
+                if (coin.startAnimations) {
+                    coin.startAnimations();
+                }
+            });
+        }
     }
 
     run() {
@@ -110,6 +151,40 @@ class World {
             cancelAnimationFrame(this.animationFrameId);
             this.animationFrameId = null;
         }
+
+        if (this.character && this.character.stopAnimations) {
+            this.character.stopAnimations();
+        }
+
+        if (this.level && this.level.enemies) {
+            this.level.enemies.forEach(enemy => {
+                if (enemy.stopAnimations) {
+                    enemy.stopAnimations();
+                }
+            });
+        }
+
+        if (this.level && this.level.clouds) {
+            this.level.clouds.forEach(cloud => {
+                if (cloud.stopAnimations) {
+                    cloud.stopAnimations();
+                }
+            });
+        }
+
+        if (this.level && this.level.coins) {
+            this.level.coins.forEach(coin => {
+                if (coin.stopAnimations) {
+                    coin.stopAnimations();
+                }
+            });
+        }
+
+        this.throwableObjects.forEach(obj => {
+            if (obj.stopAnimations) {
+                obj.stopAnimations();
+            }
+        });
     }
 
     checkThrowObjects() {
@@ -134,9 +209,10 @@ class World {
                 this.gameRunning = false;
                 document.getElementById('gameContainer').style.display = 'none';
             }
-            
+
             if (Date.now() - this.characterDeadTime > 100) {
                 this.gameOver = true;
+                this.stop();
                 showEndscreen(false);
             }
             return;
@@ -147,9 +223,10 @@ class World {
                 this.endbossDeadTime = Date.now();
                 this.gameRunning = false;
             }
-            
+
             if (Date.now() - this.endbossDeadTime > 750) {
                 this.gameOver = true;
+                this.stop();
                 showEndscreen(true);
             }
             return;

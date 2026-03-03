@@ -1,19 +1,4 @@
-let level1 = new Level(
-    initEnemies(),
-    initClouds(),
-    initBackground(),
-    initCoins(),
-    initCollectableBottles()
-);
-
 function resetLevel1() {
-    level1 = new Level(
-        initEnemies(),
-        initClouds(),
-        initBackground(),
-        initCoins(),
-        initCollectableBottles()
-    );
 }
 
 function initBackground() {

@@ -1,4 +1,5 @@
 class ThrowableObject extends MovableObject {
+    throwInterval = null;
 
     constructor(x, y) {
         super().loadImage('img/6_salsa_bottle/salsa_bottle.png');
@@ -18,9 +19,20 @@ class ThrowableObject extends MovableObject {
         this.speedY = 20;
         this.applyGravity();
 
-        setInterval(() => {
+        this.throwInterval = setInterval(() => {
             this.x += 15;
         }, 15)
+    }
+
+    stopAnimations() {
+        if (this.throwInterval) {
+            clearInterval(this.throwInterval);
+            this.throwInterval = null;
+        }
+        if (this.gravityInterval) {
+            clearInterval(this.gravityInterval);
+            this.gravityInterval = null;
+        }
     }
 
 }

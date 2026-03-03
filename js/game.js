@@ -188,13 +188,13 @@ function showEndscreen(won) {
     document.getElementById('gameContainer').style.display = 'none';
     let endscreen = document.getElementById('endscreen');
     let endimage = document.getElementById('endimage');
-    
+
     if (won) {
         endimage.src = './img/You won, you lost/You won A.png';
     } else {
         endimage.src = './img/You won, you lost/Game Over.png';
     }
-    
+
     endscreen.classList.add('show');
 }
 
@@ -205,18 +205,17 @@ function hideEndscreen() {
 
 function restartGame() {
     hideEndscreen();
-    
+
     if (world) {
         world.stop();
     }
-    
-    resetLevel1();
+
     keyboard = new Keyboard();
     world = null;
-    
+
     let gameContainer = document.getElementById('gameContainer');
     gameContainer.style.display = 'block';
-    
+
     setTimeout(() => {
         init();
         world.start();
@@ -227,19 +226,19 @@ function quitToMenu() {
     hideEndscreen();
     let gameContainer = document.getElementById('gameContainer');
     gameContainer.style.display = 'none';
-    
+
     let startscreen = document.querySelector('.startscreen');
     startscreen.style.opacity = '1';
     startscreen.style.pointerEvents = 'auto';
     startscreen.style.display = 'flex';
-    
+
     keyboard = new Keyboard();
     world = null;
 }
 
 function toggleMute() {
     let muteBtn = document.getElementById('gameMuteBtn');
-    
+
     if (isMuted) {
         globalVolume = previousVolume;
         isMuted = false;
@@ -250,6 +249,6 @@ function toggleMute() {
         isMuted = true;
         muteBtn.textContent = '🔇';
     }
-    
+
     setGlobalVolume(globalVolume);
 }

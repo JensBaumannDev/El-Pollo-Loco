@@ -71,6 +71,8 @@ window.addEventListener('DOMContentLoaded', function () {
 function setupMenuListeners() {
     const bind = (id, fn) => document.getElementById(id).addEventListener('click', fn);
     bind('startBtn', startGame);
+    bind('restartBtn', restartGame);
+    bind('quitBtn', quitToMenu);
     bind('instructionsBtn', () => document.getElementById('instructionsModal').classList.add('show'));
     bind('settingsBtn', () => document.getElementById('settingsModal').classList.add('show'));
     bind('gameInstructionsBtn', () => document.getElementById('instructionsModal').classList.add('show'));
@@ -151,4 +153,58 @@ function startGame() {
         init();
         world.start();
     }, 500);
+}
+
+function showEndscreen(won) {
+    world.stop();
+    document.getElementById('gameContainer').style.display = 'none';
+    let endscreen = document.getElementById('endscreen');
+    let endimage = document.getElementById('endimage');
+    
+    if (won) {
+        endimage.src = './img/You won, you lost/You won A.png';
+    } else {
+        endimage.src = './img/You won, you lost/Game Over.png';
+    }
+    
+    endscreen.classList.add('show');
+}
+
+function hideEndscreen() {
+    let endscreen = document.getElementById('endscreen');
+    endscreen.classList.remove('show');
+}
+
+function restartGame() {
+    hideEndscreen();
+    
+    if (world) {
+        world.stop();
+    }
+    
+    resetLevel1();
+    keyboard = new Keyboard();
+    world = null;
+    
+    let gameContainer = document.getElementById('gameContainer');
+    gameContainer.style.display = 'block';
+    
+    setTimeout(() => {
+        init();
+        world.start();
+    }, 100);
+}
+
+function quitToMenu() {
+    hideEndscreen();
+    let gameContainer = document.getElementById('gameContainer');
+    gameContainer.style.display = 'none';
+    
+    let startscreen = document.querySelector('.startscreen');
+    startscreen.style.opacity = '1';
+    startscreen.style.pointerEvents = 'auto';
+    startscreen.style.display = 'flex';
+    
+    keyboard = new Keyboard();
+    world = null;
 }

@@ -5,6 +5,12 @@ class World {
     ctx;
     keyboard;
     camera_x = 0;
+    gameOver = false;
+    gameRunning = false;
+    runInterval = null;
+    animationFrameId = null;
+    characterDeadTime = null;
+    endbossDeadTime = null;
     statusBar = new StatusBar();
     coinStatusBar = new CoinStatusBar();
     bottleStatusBar = new BottleStatusBar();
@@ -64,15 +70,30 @@ class World {
     }
 
     start() {
+        this.gameRunning = true;
         this.draw();
         this.run();
     }
 
     run() {
-        setInterval(() => {
+        this.runInterval = setInterval(() => {
+            this.checkGameOver();
+            if (!this.gameRunning) return;
             this.checkCollisions();
             this.checkThrowObjects();
         }, 1000 / 60);
+    }
+
+    stop() {
+        this.gameRunning = false;
+        if (this.runInterval !== null) {
+            clearInterval(this.runInterval);
+            this.runInterval = null;
+        }
+        if (this.animationFrameId !== null) {
+            cancelAnimationFrame(this.animationFrameId);
+            this.animationFrameId = null;
+        }
     }
 
     checkThrowObjects() {
@@ -85,6 +106,37 @@ class World {
         }
         if (!this.keyboard.f) {
             this.fKeyPressed = false;
+        }
+    }
+
+    checkGameOver() {
+        if (this.gameOver) return;
+
+        if (this.character.isDead && this.character.isDead()) {
+            if (this.characterDeadTime === null) {
+                this.characterDeadTime = Date.now();
+                this.gameRunning = false;
+                document.getElementById('gameContainer').style.display = 'none';
+            }
+            
+            if (Date.now() - this.characterDeadTime > 100) {
+                this.gameOver = true;
+                showEndscreen(false);
+            }
+            return;
+        }
+
+        if (this.level.endboss && this.level.endboss.isDead) {
+            if (this.endbossDeadTime === null) {
+                this.endbossDeadTime = Date.now();
+                this.gameRunning = false;
+            }
+            
+            if (Date.now() - this.endbossDeadTime > 750) {
+                this.gameOver = true;
+                showEndscreen(true);
+            }
+            return;
         }
     }
 
@@ -158,6 +210,8 @@ class World {
     }
 
     draw() {
+        if (this.gameOver) return;
+
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         this.ctx.translate(this.camera_x, 0);
@@ -177,11 +231,10 @@ class World {
         this.addObjectsWithParallax(this.level.collectableBottles, 1.0);
         this.addObjectsToMap(this.throwableObjects);
 
-
         this.ctx.translate(-this.camera_x, 0);
 
         let self = this;
-        requestAnimationFrame(function () {
+        this.animationFrameId = requestAnimationFrame(function () {
             self.draw();
         });
     }

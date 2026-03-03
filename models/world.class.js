@@ -56,14 +56,16 @@ class World {
         if (this.level.endboss) {
             this.endbossStatusBar.setPercentage(this.level.endboss.energy);
         }
-        this.draw();
         this.setWorld();
-        this.run();
     }
-
 
     setWorld() {
         this.character.world = this;
+    }
+
+    start() {
+        this.draw();
+        this.run();
     }
 
     run() {

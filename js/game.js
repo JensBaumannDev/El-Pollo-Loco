@@ -149,5 +149,6 @@ function startGame() {
 
         document.getElementById('gameContainer').style.display = 'block';
         init();
+        world.start();
     }, 500);
 }

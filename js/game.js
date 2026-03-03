@@ -144,7 +144,17 @@ function setupFullscreenControls() {
     });
 }
 
+function showLoadingScreen() {
+    document.getElementById('loadingScreen').classList.add('show');
+}
+
+function hideLoadingScreen() {
+    document.getElementById('loadingScreen').classList.remove('show');
+}
+
 function startGame() {
+    showLoadingScreen();
+
     let startscreen = document.querySelector('.startscreen');
     startscreen.style.opacity = '0';
     startscreen.style.pointerEvents = 'none';
@@ -164,6 +174,12 @@ function startGame() {
         document.getElementById('gameContainer').style.display = 'block';
         init();
         world.start();
+        requestAnimationFrame(() => {
+            hideLoadingScreen();
+            let startSound = new Audio('audio/game/gameStart.mp3');
+            startSound.volume = globalVolume;
+            startSound.play();
+        });
     }, 500);
 }
 

@@ -11,6 +11,7 @@ class World {
     animationFrameId = null;
     characterDeadTime = null;
     endbossDeadTime = null;
+    endbossApproachPlayed = false;
     statusBar = new StatusBar();
     coinStatusBar = new CoinStatusBar();
     bottleStatusBar = new BottleStatusBar();
@@ -55,7 +56,7 @@ class World {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
-        this.level.enemies.forEach(e => { if (e instanceof Chicken) e.world = this; });
+        this.level.enemies.forEach(e => { e.world = this; });
         this.totalCoins = this.level.coins.length;
         this.coinStatusBar.setPercentage(0);
         this.bottleStatusBar.setAmount(0);
@@ -79,9 +80,24 @@ class World {
         this.runInterval = setInterval(() => {
             this.checkGameOver();
             if (!this.gameRunning) return;
+            this.updateEndbossState();
             this.checkCollisions();
             this.checkThrowObjects();
         }, 1000 / 60);
+    }
+
+    updateEndbossState() {
+        if (!this.level.endboss || this.level.endboss.isDead) return;
+        if (this.isCharacterNearEndboss()) {
+            if (!this.level.endboss.hasSeenCharacter) {
+                this.level.endboss.hasSeenCharacter = true;
+                this.level.endboss.startAlert();
+                if (!this.endbossApproachPlayed) {
+                    this.playSound(this.mySounds.endboss.voice);
+                    this.endbossApproachPlayed = true;
+                }
+            }
+        }
     }
 
     stop() {
@@ -292,7 +308,7 @@ class World {
     isCharacterNearEndboss() {
         if (!this.level.endboss) return false;
         const distance = Math.abs(this.character.x - this.level.endboss.x);
-        return distance < 1000;
+        return distance < 600;
     }
 
     flipImageBack(mo) {

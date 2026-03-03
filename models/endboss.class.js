@@ -3,6 +3,10 @@ class Endboss extends MovableObject {
     height = 350;
     width = 300;
     isDead = false;
+    isActive = false;
+    isAlerting = false;
+    hasSeenCharacter = false;
+    alertFrameIndex = 0;
     energy = 100;
     offset = {
         top: 50,
@@ -43,13 +47,13 @@ class Endboss extends MovableObject {
         this.x = 6800;
         this.animate();
 
-        this.speed = 0.15 + Math.random() * 0.5;
+        this.speed = 0.25 + Math.random() * 0.5;
 
     }
 
     animate() {
         setInterval(() => {
-            if (!this.isDead) {
+            if (this.isActive && !this.isDead) {
                 this.moveLeft();
             }
         }, 1000 / 60);
@@ -57,10 +61,31 @@ class Endboss extends MovableObject {
         setInterval(() => {
             if (this.isDead) {
                 this.playAnimation(this.IMAGES_DEAD);
-            } else {
+            } else if (this.isAlerting) {
+                this.playAlertAnimationOnce();
+            } else if (this.isActive) {
                 this.playAnimation(this.IMAGES_WALKING2);
+            } else {
+                this.img = this.imageCache[this.IMAGES_WALKING[0]];
             }
         }, 200);
+    }
+
+    startAlert() {
+        if (this.isDead || this.isActive || this.isAlerting) return;
+        this.isAlerting = true;
+        this.alertFrameIndex = 0;
+    }
+
+    playAlertAnimationOnce() {
+        if (this.alertFrameIndex < this.IMAGES_WALKING.length) {
+            let path = this.IMAGES_WALKING[this.alertFrameIndex];
+            this.img = this.imageCache[path];
+            this.alertFrameIndex++;
+            return;
+        }
+        this.isAlerting = false;
+        this.isActive = true;
     }
 
     die() {

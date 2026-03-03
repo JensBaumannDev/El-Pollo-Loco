@@ -2,6 +2,8 @@ let canvas;
 let world;
 let keyboard = new Keyboard();
 var globalVolume = 0.4;
+let isMuted = false;
+let previousVolume = 0.4;
 
 function updateCanvasSize() {
     canvas = document.getElementById('canvas');
@@ -80,6 +82,11 @@ function setupMenuListeners() {
     bind('closeInstructions', () => document.getElementById('instructionsModal').classList.remove('show'));
     bind('closeSettings', () => document.getElementById('settingsModal').classList.remove('show'));
 
+    let muteBtn = document.getElementById('gameMuteBtn');
+    if (muteBtn) {
+        muteBtn.addEventListener('mousedown', toggleMute);
+    }
+
     document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', e => {
         if (e.target === m) m.classList.remove('show');
     }));
@@ -97,6 +104,11 @@ function setupVolumeControl() {
 
     slider.addEventListener('input', function () {
         label.textContent = this.value + '%';
+        isMuted = false;
+        let muteBtn = document.getElementById('gameMuteBtn');
+        if (muteBtn) {
+            muteBtn.textContent = '🔊';
+        }
         setGlobalVolume(this.value / 100);
     });
 }
@@ -207,4 +219,21 @@ function quitToMenu() {
     
     keyboard = new Keyboard();
     world = null;
+}
+
+function toggleMute() {
+    let muteBtn = document.getElementById('gameMuteBtn');
+    
+    if (isMuted) {
+        globalVolume = previousVolume;
+        isMuted = false;
+        muteBtn.textContent = '🔊';
+    } else {
+        previousVolume = globalVolume;
+        globalVolume = 0;
+        isMuted = true;
+        muteBtn.textContent = '🔇';
+    }
+    
+    setGlobalVolume(globalVolume);
 }

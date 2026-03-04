@@ -9,6 +9,83 @@
     src: url('./fonts/Zabars.ttf') format('truetype');
 }
 
+.rotate-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #2C1810 0%, #1a0f0a 100%);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+}
+
+.rotate-content {
+    text-align: center;
+    color: #FFD700;
+    padding: 20px;
+}
+
+.phone-icon {
+    margin-bottom: 20px;
+    animation: rotatePhone 2s ease-in-out infinite;
+}
+
+.rotate-arrow {
+    font-size: 60px;
+    color: #FF6347;
+    margin: 10px 0;
+    animation: pulse 1.5s ease-in-out infinite;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.rotate-overlay h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #FFD700;
+    text-shadow: 3px 3px 0 #FF6347, 5px 5px 0 rgba(0, 0, 0, 0.3);
+    font-weight: bold;
+}
+
+.rotate-overlay p {
+    font-size: 16px;
+    color: #E8C394;
+}
+
+@keyframes rotatePhone {
+
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    50% {
+        transform: rotate(90deg);
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.2);
+        opacity: 0.7;
+    }
+}
+
+@media screen and (max-width: 767px) and (orientation: portrait) {
+    .rotate-overlay {
+        display: flex !important;
+    }
+}
+
 body {
     font-family: 'Arial', sans-serif;
     background: #2C1810;
@@ -184,6 +261,7 @@ body {
     from {
         transform: rotate(0deg);
     }
+
     to {
         transform: rotate(360deg);
     }

@@ -68,7 +68,31 @@ window.addEventListener('DOMContentLoaded', function () {
     setupMenuListeners();
     setupVolumeControl();
     setupFullscreenControls();
+    setupOrientationCheck();
 });
+
+function setupOrientationCheck() {
+    const rotateOverlay = document.getElementById('rotateOverlay');
+
+    function checkOrientation() {
+        const isSmartphone = window.matchMedia('(max-width: 767px)').matches;
+        const isPortrait = window.matchMedia('(orientation: portrait)').matches;
+
+        if (rotateOverlay) {
+            if (isSmartphone && isPortrait) {
+                rotateOverlay.style.display = 'flex';
+            } else {
+                rotateOverlay.style.display = 'none';
+            }
+        }
+    }
+
+    checkOrientation();
+
+    window.addEventListener('orientationchange', checkOrientation);
+
+    window.addEventListener('resize', checkOrientation);
+}
 
 function setupMenuListeners() {
     const bind = (id, fn) => document.getElementById(id).addEventListener('click', fn);

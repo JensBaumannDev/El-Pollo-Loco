@@ -7,7 +7,7 @@ class Endboss extends MovableObject {
     isAlerting = false;
     hasSeenCharacter = false;
     alertFrameIndex = 0;
-    energy = 100;
+    energy = 200;
     offset = {
         top: 50,
         bottom: 20,

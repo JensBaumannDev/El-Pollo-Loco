@@ -220,12 +220,12 @@ class World {
             if (this.characterDeadTime === null) {
                 this.characterDeadTime = Date.now();
                 this.gameRunning = false;
-                document.getElementById('gameContainer').style.display = 'none';
             }
 
-            if (Date.now() - this.characterDeadTime > 100) {
+            if (Date.now() - this.characterDeadTime > 700) {
                 this.gameOver = true;
                 this.stop();
+                document.getElementById('gameContainer').style.display = 'none';
                 showEndscreen(false);
             }
             return;
@@ -262,6 +262,7 @@ class World {
             } else if (!this.character.isHurt() && !gotHit) {
                 this.character.hit();
                 this.statusBar.setPercentage(this.character.energy);
+                this.playSound(this.mySounds.character.damage);
                 gotHit = true;
             }
         }

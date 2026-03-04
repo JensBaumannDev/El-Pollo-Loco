@@ -1,6 +1,3 @@
-function resetLevel1() {
-}
-
 function initBackground() {
     let backgroundObjects = [];
     for (let index = -10; index <= 10; index++) {
@@ -32,14 +29,6 @@ function initEnemies() {
     }
     enemies.push(new Endboss());
     return enemies;
-}
-
-function initChicken() {
-    let chicken = [];
-    for (let i = 0; i < 10; i++) {
-        chicken.push(new Chicken());
-    }
-    return chicken;
 }
 
 function initCoins() {

@@ -3,7 +3,6 @@ class Character extends MovableObject {
     height = 250;
     width = 130;
     speed = 5;
-    snoringSoundPlayed = false;
     IMAGES_WALKING = [
         'img/2_character_pepe/2_walk/W-21.png',
         'img/2_character_pepe/2_walk/W-22.png',
@@ -69,7 +68,6 @@ class Character extends MovableObject {
     };
     world;
     framesanimated = 0;
-    snoringSoundPlaying = false;
     spaceKeyPressed = false;
     moveInterval = null;
     animateInterval = null;

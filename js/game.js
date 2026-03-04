@@ -13,7 +13,6 @@ function updateCanvasSize() {
 }
 
 function init() {
-    updateCanvasSize();
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
 }
@@ -30,13 +29,6 @@ window.addEventListener("keydown", (keyevent) => {
     if (keyevent.key == 'f') {
         keyboard.f = true;
     }
-
-    if (keyevent.key == 'w') {
-        keyboard.UP = true;
-    }
-    if (keyevent.key == 's') {
-        keyboard.DOWN = true;
-    }
     if (keyevent.key == ' ') {
         keyboard.SPACE = true;
     }
@@ -51,12 +43,6 @@ window.addEventListener("keyup", (keyevent) => {
     }
     if (keyevent.key == 'f') {
         keyboard.f = false;
-    }
-    if (keyevent.key == 'w') {
-        keyboard.UP = false;
-    }
-    if (keyevent.key == 's') {
-        keyboard.DOWN = false;
     }
     if (keyevent.key == ' ') {
         keyboard.SPACE = false;
@@ -185,16 +171,6 @@ function startGame() {
 
     setTimeout(() => {
         startscreen.style.display = 'none';
-
-        let h1El = document.querySelector('h1');
-        if (h1El) {
-            if (window.innerHeight >= window.innerWidth) {
-                h1El.style.display = 'block';
-            } else {
-                h1El.style.display = 'none';
-            }
-        }
-
         document.getElementById('gameContainer').style.display = 'block';
         init();
         world.start();

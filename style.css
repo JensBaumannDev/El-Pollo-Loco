@@ -103,15 +103,6 @@ body {
     gap: 15px;
 }
 
-.main-title {
-    display: none;
-    font-family: 'Zabars', sans-serif;
-    font-size: clamp(50px, 12vw, 140px);
-    color: #FFD700;
-    text-shadow: 5px 5px 0 #FF6347, 8px 8px 0 rgba(0, 0, 0, 0.4);
-    margin-bottom: 32px;
-}
-
 .startscreen {
     position: relative;
     width: 720px;
@@ -563,10 +554,6 @@ body {
         padding: 5px;
     }
 
-    .main-title {
-        display: none;
-    }
-
     .startscreen {
         max-height: calc(100vh - 80px);
     }
@@ -610,10 +597,6 @@ body {
 }
 
 @media (orientation: landscape) and (max-height: 400px) {
-    .main-title {
-        display: none;
-    }
-
     .startscreen {
         max-height: calc(100vh - 60px);
     }

@@ -55,6 +55,7 @@ window.addEventListener('DOMContentLoaded', function () {
     setupVolumeControl();
     setupFullscreenControls();
     setupOrientationCheck();
+    setupMobileControls();
 });
 
 function setupOrientationCheck() {
@@ -251,4 +252,47 @@ function toggleMute() {
     }
 
     setGlobalVolume(globalVolume);
+}
+
+function setupMobileControls() {
+    const buttons = [
+        { id: 'btnLeft', key: 'LEFT' },
+        { id: 'btnRight', key: 'RIGHT' },
+        { id: 'btnJump', key: 'SPACE' },
+        { id: 'btnThrow', key: 'f' }
+    ];
+
+    buttons.forEach(btn => {
+        const element = document.getElementById(btn.id);
+        if (!element) return;
+
+        element.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            keyboard[btn.key] = true;
+        });
+
+        element.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            keyboard[btn.key] = false;
+        });
+
+        element.addEventListener('touchcancel', (e) => {
+            e.preventDefault();
+            keyboard[btn.key] = false;
+        });
+
+        element.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            keyboard[btn.key] = true;
+        });
+
+        element.addEventListener('mouseup', (e) => {
+            e.preventDefault();
+            keyboard[btn.key] = false;
+        });
+
+        element.addEventListener('mouseleave', (e) => {
+            keyboard[btn.key] = false;
+        });
+    });
 }

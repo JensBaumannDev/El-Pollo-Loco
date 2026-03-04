@@ -511,7 +511,7 @@ body {
     pointer-events: none;
 }
 
-@media (orientation: landscape) {
+@media (hover: none) and (pointer: coarse) and (orientation: landscape) {
     .mobile-controls {
         display: block;
     }

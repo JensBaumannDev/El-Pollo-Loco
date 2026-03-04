@@ -3,6 +3,7 @@ class MovableObject extends DrawableObject {
     otherDirection = false;
     speedY = 0;
     acceleration = 2;
+    groundY = 180;
     energy = 100;
     lastHit = 0;
     gravityInterval = null;
@@ -13,18 +14,15 @@ class MovableObject extends DrawableObject {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
             }
-            if (this.y > 180) {
-                this.y = 180;
+            if (this.y > this.groundY) {
+                this.y = this.groundY;
                 this.speedY = 0;
             }
         }, 1000 / 40);
     }
 
     isAboveGround() {
-        if (this instanceof ThrowableObject) {
-            return true;
-        }
-        return this.y < 180;
+        return this.y < this.groundY;
     }
 
     isColliding(mo) {

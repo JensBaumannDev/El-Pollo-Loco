@@ -24,9 +24,10 @@ function initClouds() {
 
 function initEnemies() {
     let enemies = [];
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 24; i++) {
         enemies.push(new Chicken());
     }
+
     enemies.push(new Endboss());
     return enemies;
 }

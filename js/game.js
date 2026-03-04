@@ -1,9 +1,10 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
-var globalVolume = 0.4;
+var globalVolume = 0.3;
 let isMuted = false;
-let previousVolume = 0.4;
+let previousVolume = 0.3;
+let pausedByModal = false;
 
 function updateCanvasSize() {
     canvas = document.getElementById('canvas');
@@ -20,13 +21,14 @@ function init() {
 window.addEventListener('resize', updateCanvasSize);
 
 window.addEventListener("keydown", (keyevent) => {
-    if (keyevent.key == 'a') {
+    const key = (keyevent.key || '').toLowerCase();
+    if (key == 'a') {
         keyboard.LEFT = true;
     }
-    if (keyevent.key == 'd') {
+    if (key == 'd') {
         keyboard.RIGHT = true;
     }
-    if (keyevent.key == 'f') {
+    if (keyevent.code === 'KeyF' || key === 'f') {
         keyboard.f = true;
     }
     if (keyevent.key == ' ') {
@@ -35,13 +37,14 @@ window.addEventListener("keydown", (keyevent) => {
 });
 
 window.addEventListener("keyup", (keyevent) => {
-    if (keyevent.key == 'a') {
+    const key = (keyevent.key || '').toLowerCase();
+    if (key == 'a') {
         keyboard.LEFT = false;
     }
-    if (keyevent.key == 'd') {
+    if (key == 'd') {
         keyboard.RIGHT = false;
     }
-    if (keyevent.key == 'f') {
+    if (keyevent.code === 'KeyF' || key === 'f') {
         keyboard.f = false;
     }
     if (keyevent.key == ' ') {
@@ -86,12 +89,12 @@ function setupMenuListeners() {
     bind('startBtn', startGame);
     bind('restartBtn', restartGame);
     bind('quitBtn', quitToMenu);
-    bind('instructionsBtn', () => document.getElementById('instructionsModal').classList.add('show'));
-    bind('settingsBtn', () => document.getElementById('settingsModal').classList.add('show'));
-    bind('gameInstructionsBtn', () => document.getElementById('instructionsModal').classList.add('show'));
-    bind('gameSettingsBtn', () => document.getElementById('settingsModal').classList.add('show'));
-    bind('closeInstructions', () => document.getElementById('instructionsModal').classList.remove('show'));
-    bind('closeSettings', () => document.getElementById('settingsModal').classList.remove('show'));
+    bind('instructionsBtn', () => setModalOpen('instructionsModal', true));
+    bind('settingsBtn', () => setModalOpen('settingsModal', true));
+    bind('gameInstructionsBtn', () => setModalOpen('instructionsModal', true));
+    bind('gameSettingsBtn', () => setModalOpen('settingsModal', true));
+    bind('closeInstructions', () => setModalOpen('instructionsModal', false));
+    bind('closeSettings', () => setModalOpen('settingsModal', false));
 
     let muteBtn = document.getElementById('gameMuteBtn');
     if (muteBtn) {
@@ -99,15 +102,50 @@ function setupMenuListeners() {
     }
 
     document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', e => {
-        if (e.target === m) m.classList.remove('show');
+        if (e.target === m) {
+            setModalOpen(m.id, false);
+        }
     }));
+}
+
+function setModalOpen(modalId, show) {
+    const modal = document.getElementById(modalId);
+    if (!modal) return;
+    modal.classList.toggle('show', show);
+    syncModalPause();
+}
+
+function syncModalPause() {
+    const hasOpenModal = !!document.querySelector('.modal.show');
+    const gameContainer = document.getElementById('gameContainer');
+    const gameVisible = !!gameContainer && getComputedStyle(gameContainer).display !== 'none';
+    const canControlWorld = world && !world.gameOver && gameVisible;
+
+    if (hasOpenModal && !pausedByModal && canControlWorld && world.gameRunning) {
+        keyboard.LEFT = keyboard.RIGHT = keyboard.UP = keyboard.DOWN = keyboard.SPACE = keyboard.f = false;
+        world.stop();
+        pausedByModal = true;
+        return;
+    }
+
+    if (!hasOpenModal && pausedByModal && canControlWorld) {
+        world.start();
+    }
+    if (!hasOpenModal) pausedByModal = false;
 }
 
 function setupVolumeControl() {
     const slider = document.getElementById('volumeSlider');
     const label = document.getElementById('volumeValue');
     let vol = parseFloat(localStorage.getItem('gameVolume'));
-    vol = Number.isFinite(vol) ? vol : 0.4;
+    let fallbackVol = parseFloat(localStorage.getItem('preferredGameVolume'));
+
+    fallbackVol = Number.isFinite(fallbackVol) && fallbackVol > 0 ? fallbackVol : 0.2;
+    if (!Number.isFinite(vol)) {
+        vol = fallbackVol;
+    } else if (vol <= 0) {
+        vol = fallbackVol;
+    }
 
     slider.value = Math.round(vol * 100);
     label.textContent = slider.value + '%';
@@ -125,8 +163,17 @@ function setupVolumeControl() {
 }
 
 function setGlobalVolume(volume) {
+    setGlobalVolumeInternal(volume, true);
+}
+
+function setGlobalVolumeInternal(volume, persist) {
     globalVolume = Math.max(0, Math.min(1, volume));
-    localStorage.setItem('gameVolume', globalVolume);
+    if (persist) {
+        localStorage.setItem('gameVolume', globalVolume);
+        if (globalVolume > 0) {
+            localStorage.setItem('preferredGameVolume', globalVolume);
+        }
+    }
     document.querySelectorAll('audio').forEach(a => a.volume = globalVolume);
 }
 
@@ -164,6 +211,7 @@ function hideLoadingScreen() {
 }
 
 function startGame() {
+    pausedByModal = false;
     showLoadingScreen();
 
     let startscreen = document.querySelector('.startscreen');
@@ -185,6 +233,7 @@ function startGame() {
 }
 
 function showEndscreen(won) {
+    pausedByModal = false;
     world.stop();
     document.getElementById('gameContainer').style.display = 'none';
     let endscreen = document.getElementById('endscreen');
@@ -205,6 +254,7 @@ function hideEndscreen() {
 }
 
 function restartGame() {
+    pausedByModal = false;
     hideEndscreen();
 
     if (world) {
@@ -224,6 +274,7 @@ function restartGame() {
 }
 
 function quitToMenu() {
+    pausedByModal = false;
     hideEndscreen();
     let gameContainer = document.getElementById('gameContainer');
     gameContainer.style.display = 'none';
@@ -241,17 +292,19 @@ function toggleMute() {
     let muteBtn = document.getElementById('gameMuteBtn');
 
     if (isMuted) {
-        globalVolume = previousVolume;
+        globalVolume = previousVolume > 0 ? previousVolume : 0.3;
         isMuted = false;
         muteBtn.textContent = '🔊';
     } else {
-        previousVolume = globalVolume;
+        if (globalVolume > 0) {
+            previousVolume = globalVolume;
+        }
         globalVolume = 0;
         isMuted = true;
         muteBtn.textContent = '🔇';
     }
 
-    setGlobalVolume(globalVolume);
+    setGlobalVolumeInternal(globalVolume, false);
 }
 
 function setupMobileControls() {

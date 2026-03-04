@@ -81,6 +81,7 @@ class World {
     }
 
     start() {
+        if (this.gameRunning) return;
         this.gameRunning = true;
         this.startAllAnimations();
         this.draw();
@@ -115,9 +116,18 @@ class World {
                 }
             });
         }
+
+        this.throwableObjects.forEach(obj => {
+            if (obj.startAnimations) {
+                obj.startAnimations();
+            }
+        });
     }
 
     run() {
+        if (this.runInterval !== null) {
+            clearInterval(this.runInterval);
+        }
         this.runInterval = setInterval(() => {
             this.checkGameOver();
             if (!this.gameRunning) return;
@@ -189,7 +199,10 @@ class World {
 
     checkThrowObjects() {
         if (this.keyboard.f && !this.fKeyPressed && this.collectedBottles > 0) {
-            let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
+            const throwToLeft = this.character.otherDirection;
+            const bottleX = throwToLeft ? this.character.x : this.character.x + this.character.width - 30;
+            const bottleY = this.character.y + 100;
+            let bottle = new ThrowableObject(bottleX, bottleY, throwToLeft);
             this.throwableObjects.push(bottle);
             this.collectedBottles--;
             this.bottleStatusBar.setAmount(this.collectedBottles);

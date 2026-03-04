@@ -68,10 +68,11 @@ class World {
 
         this.level.enemies.forEach(e => { e.world = this; });
         this.totalCoins = this.level.coins.length;
+        this.statusBar.setPercentage(this.character.energy);
         this.coinStatusBar.setPercentage(0);
         this.bottleStatusBar.setAmount(0);
         if (this.level.endboss) {
-            this.endbossStatusBar.setPercentage(this.level.endboss.energy);
+            this.endbossStatusBar.setPercentage((this.level.endboss.energy / 200) * 100);
         }
         this.setWorld();
     }
@@ -295,7 +296,7 @@ class World {
                 if (bottle.isColliding(enemy)) {
                     if (enemy instanceof Endboss) {
                         enemy.hit();
-                        this.endbossStatusBar.setPercentage(enemy.energy);
+                        this.endbossStatusBar.setPercentage((enemy.energy / 200) * 100);
                         if (enemy.energy <= 0) {
                             enemy.die();
                         }

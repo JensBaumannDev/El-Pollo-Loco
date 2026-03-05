@@ -132,6 +132,7 @@ class World {
         this.runInterval = setInterval(() => {
             this.checkGameOver();
             if (!this.gameRunning) return;
+            this.spawnEnemies();
             this.updateEndbossState();
             this.checkCollisions();
             this.checkThrowObjects();
@@ -149,6 +150,24 @@ class World {
                     this.endbossApproachPlayed = true;
                 }
             }
+        }
+    }
+
+    spawnEnemies() {
+        this.level.enemies = this.level.enemies.filter(enemy => {
+            if (enemy instanceof Endboss) return true;
+            return enemy.x > this.character.x - 500;
+        });
+
+        const spawnDistance = this.character.x + 1500;
+        const existingChickens = this.level.enemies.filter(e => e instanceof Chicken && e.x > spawnDistance - 300).length;
+        
+        if (existingChickens < 2) {
+            const newChicken = new Chicken();
+            newChicken.x = spawnDistance + Math.random() * 300;
+            newChicken.world = this;
+            newChicken.startAnimations();
+            this.level.enemies.push(newChicken);
         }
     }
 

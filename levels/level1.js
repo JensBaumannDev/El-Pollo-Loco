@@ -24,8 +24,15 @@ function initClouds() {
 
 function initEnemies() {
     let enemies = [];
-    for (let i = 0; i < 24; i++) {
+    const numberOfChickens = 8;
+    const levelLength = 9700;
+    const spacing = levelLength / numberOfChickens;
+    
+    for (let i = 0; i < numberOfChickens; i++) {
+        let baseX = 1500 + (i * spacing);
+        let variation = (Math.random() - 0.5) * 200;
         enemies.push(new Chicken());
+        enemies[i].x = Math.max(1500, baseX + variation);
     }
 
     enemies.push(new Endboss());

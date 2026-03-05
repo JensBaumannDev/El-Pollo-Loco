@@ -20,6 +20,8 @@ class World {
     collectedCoins = 0;
     totalCoins = 0;
     collectedBottles = 0;
+    lastChickenSpawnTime = 0;
+    chickenSpawnInterval = 3000;
     mySounds = {
         character: {
             damage: 'audio/character/characterDamage.mp3',
@@ -132,26 +134,37 @@ class World {
 
     spawnEnemies() {
         this.removeOutOfBoundsEnemies();
-        this.addNewChickensIfNeeded();
+        this.trySpawnNewChicken();
     }
 
     removeOutOfBoundsEnemies() {
         this.level.enemies = this.level.enemies.filter(enemy => {
             if (enemy instanceof Endboss) return true;
-            return enemy.x > this.character.x - 500;
+            if (enemy instanceof Chicken || enemy instanceof ChickenSmall) {
+                return enemy.x > this.character.x - 500;
+            }
+            return true;
         });
     }
 
+    trySpawnNewChicken() {
+        const now = Date.now();
+        const timeSinceLastSpawn = now - this.lastChickenSpawnTime;
+        if (timeSinceLastSpawn < this.chickenSpawnInterval) return;
+        this.addNewChickensIfNeeded();
+        this.lastChickenSpawnTime = now;
+    }
+
     addNewChickensIfNeeded() {
-        const spawnDistance = this.character.x + 1500;
-        const existingChickens = this.level.enemies.filter(e => e instanceof Chicken && e.x > spawnDistance - 300).length;
-        if (existingChickens < 2) {
-            this.spawnNewChicken(spawnDistance);
-        }
+        const maxChickens = 10;
+        const activeChickens = this.level.enemies.filter(e => e instanceof Chicken || e instanceof ChickenSmall).length;
+        if (activeChickens >= maxChickens) return;
+        const spawnDistance = this.character.x + 1800;
+        this.spawnNewChicken(spawnDistance);
     }
 
     spawnNewChicken(spawnDistance) {
-        const newChicken = new Chicken();
+        let newChicken = Math.random() < 0.5 ? new ChickenSmall() : new Chicken();
         newChicken.x = spawnDistance + Math.random() * 300;
         newChicken.world = this;
         newChicken.startAnimations();
@@ -260,7 +273,8 @@ class World {
     }
 
     isChickenJumpKill(enemy) {
-        return enemy instanceof Chicken && this.character.speedY < 0 &&
+        let isChicken = enemy instanceof Chicken || enemy instanceof ChickenSmall;
+        return isChicken && this.character.speedY < 0 &&
             (this.character.y + this.character.height - this.character.offset.bottom) < (enemy.y + enemy.height / 2);
     }
 
@@ -322,7 +336,7 @@ class World {
             enemy.hit();
             this.endbossStatusBar.setPercentage((enemy.energy / 200) * 100);
             if (enemy.energy <= 0) enemy.die();
-        } else if (enemy instanceof Chicken) {
+        } else if (enemy instanceof Chicken || enemy instanceof ChickenSmall) {
             enemy.hit();
         }
         this.throwableObjects.splice(bottleIndex, 1);

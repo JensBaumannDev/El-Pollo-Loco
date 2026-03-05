@@ -34,7 +34,9 @@ function initEnemies() {
     for (let i = 0; i < numberOfChickens; i++) {
         let baseX = 1500 + (i * spacing);
         let variation = (Math.random() - 0.5) * 200;
-        enemies.push(new Chicken());
+        let isSmall = Math.random() < 0.5;
+        let chicken = isSmall ? new ChickenSmall() : new Chicken();
+        enemies.push(chicken);
         enemies[i].x = Math.max(1500, baseX + variation);
     }
 

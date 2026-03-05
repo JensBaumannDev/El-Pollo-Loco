@@ -1,3 +1,13 @@
+/**
+ * @file Character class
+ * @description Main playable character (Pepe) with animations and controls
+ */
+
+/**
+ * Main playable character class
+ * @class
+ * @extends MovableObject
+ */
 class Character extends MovableObject {
     y = 180;
     height = 250;
@@ -73,6 +83,10 @@ class Character extends MovableObject {
     animateInterval = null;
     runningSound = null;
 
+    /**
+     * Creates a character instance and loads all animations
+     * @constructor
+     */
     constructor() {
         super().loadImage('img/2_character_pepe/2_walk/W-21.png')
         this.loadImages(this.IMAGES_WALKING);
@@ -83,6 +97,9 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_IDLE_LONG);
     }
 
+    /**
+     * Starts all character animations and movement loops
+     */
     startAnimations() {
         this.applyGravity();
         this.runningSound = new Audio('audio/character/characterRun.mp3');
@@ -92,6 +109,9 @@ class Character extends MovableObject {
         this.startAnimationLoop();
     }
 
+    /**
+     * Starts the movement loop for character controls
+     */
     startMovementLoop() {
         this.moveInterval = setInterval(() => {
             this.handleMovement();
@@ -100,6 +120,9 @@ class Character extends MovableObject {
         }, 1000 / 100);
     }
 
+    /**
+     * Handles character movement based on keyboard input
+     */
     handleMovement() {
         let isMoving = (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) ||
             (this.world.keyboard.LEFT && this.x > 0);
@@ -111,6 +134,10 @@ class Character extends MovableObject {
         this.handleRunningSound(isMoving);
     }
 
+    /**
+     * Handles running sound playback
+     * @param {boolean} isMoving - Whether the character is moving
+     */
     handleRunningSound(isMoving) {
         if (isMoving && !this.isAboveGround() && !this.isDead()) {
             this.runningSound.volume = globalVolume * 0.3;
@@ -121,6 +148,9 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Handles character jump input
+     */
     handleJump() {
         if (this.world.keyboard.SPACE && !this.isAboveGround() && !this.spaceKeyPressed) {
             this.jump();
@@ -130,12 +160,18 @@ class Character extends MovableObject {
         if (!this.world.keyboard.SPACE) this.spaceKeyPressed = false;
     }
 
+    /**
+     * Starts the animation loop for character sprites
+     */
     startAnimationLoop() {
         this.animateInterval = setInterval(() => {
             this.updateAnimation();
         }, 100);
     }
 
+    /**
+     * Updates character animation based on current state
+     */
     updateAnimation() {
         if (this.isDead()) {
             this.playAnimation(this.IMAGES_DEAD);
@@ -177,10 +213,16 @@ class Character extends MovableObject {
         this.img = this.imageCache[path];
     }
 
+    /**
+     * Makes the character jump
+     */
     jump() {
         this.speedY = 25;
     }
 
+    /**
+     * Stops all character animations and intervals
+     */
     stopAnimations() {
         if (this.moveInterval) {
             clearInterval(this.moveInterval);

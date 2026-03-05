@@ -1,7 +1,24 @@
+/**
+ * @file ThrowableObject class
+ * @description Throwable bottle projectile
+ */
+
+/**
+ * Throwable bottle object class
+ * @class
+ * @extends MovableObject
+ */
 class ThrowableObject extends MovableObject {
     throwInterval = null;
     throwDirection = 1;
 
+    /**
+     * Creates a throwable object
+     * @constructor
+     * @param {number} x - X position
+     * @param {number} y - Y position
+     * @param {boolean} [throwToLeft=false] - Whether to throw left
+     */
     constructor(x, y, throwToLeft = false) {
         super().loadImage('img/6_salsa_bottle/salsa_bottle.png');
         this.x = x;
@@ -19,6 +36,10 @@ class ThrowableObject extends MovableObject {
         };
         this.throw();
     }
+    
+    /**
+     * Throws the bottle
+     */
     throw() {
         this.speedY = 20;
         this.startAnimations();

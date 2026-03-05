@@ -1,3 +1,13 @@
+/**
+ * @file Endboss class
+ * @description Final boss enemy with alert and attack animations
+ */
+
+/**
+ * Endboss enemy class
+ * @class
+ * @extends MovableObject
+ */
 class Endboss extends MovableObject {
     y = 100;
     height = 350;
@@ -50,6 +60,9 @@ class Endboss extends MovableObject {
         this.speed = 0.5 + Math.random() * 1;
     }
 
+    /**
+     * Starts all endboss animations
+     */
     startAnimations() {
         this.startMovementLoop();
         this.startAnimationLoop();

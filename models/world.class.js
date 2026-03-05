@@ -1,3 +1,12 @@
+/**
+ * @file World class
+ * @description Main game world controller managing all game objects and logic
+ */
+
+/**
+ * Main game world class that manages game logic and rendering
+ * @class
+ */
 class World {
     character;
     level;
@@ -54,6 +63,12 @@ class World {
         },
     }
 
+    /**
+     * Creates a world instance
+     * @constructor
+     * @param {HTMLCanvasElement} canvas - The canvas element
+     * @param {Keyboard} keyboard - The keyboard input handler
+     */
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
@@ -63,6 +78,9 @@ class World {
         this.initGameElements();
     }
 
+    /**
+     * Initializes game elements
+     */
     initGameElements() {
         this.level.enemies.forEach(e => { e.world = this; });
         this.totalCoins = this.level.coins.length;
@@ -70,6 +88,9 @@ class World {
         this.setWorld();
     }
 
+    /**
+     * Initializes all status bars
+     */
     initStatusBars() {
         this.statusBar.setPercentage(this.character.energy);
         this.coinStatusBar.setPercentage(0);
@@ -79,10 +100,16 @@ class World {
         }
     }
 
+    /**
+     * Sets world reference in character
+     */
     setWorld() {
         this.character.world = this;
     }
 
+    /**
+     * Starts the game loop
+     */
     start() {
         if (this.gameRunning) return;
         this.gameRunning = true;
@@ -91,6 +118,9 @@ class World {
         this.run();
     }
 
+    /**
+     * Starts animations for all game objects
+     */
     startAllAnimations() {
         if (this.character?.startAnimations) this.character.startAnimations();
         this.startAnimationsForCollection(this.level?.enemies);
@@ -104,6 +134,9 @@ class World {
         collection.forEach(obj => obj.startAnimations?.());
     }
 
+    /**
+     * Main game loop
+     */
     run() {
         if (this.runInterval !== null) {
             clearInterval(this.runInterval);
@@ -171,6 +204,9 @@ class World {
         this.level.enemies.push(newChicken);
     }
 
+    /**
+     * Stops the game and all animations
+     */
     stop() {
         this.gameRunning = false;
         this.clearIntervals();
@@ -248,6 +284,9 @@ class World {
         }
     }
 
+    /**
+     * Checks all collision types
+     */
     checkCollisions() {
         this.checkCharacterEnemyCollisions();
         this.checkCoinCollisions();
@@ -343,6 +382,10 @@ class World {
         this.playSound(this.mySounds.thowable.bottlebreak);
     }
 
+    /**
+     * Plays a sound effect
+     * @param {string} src - Path to the audio file
+     */
     playSound(src) {
         let sound = new Audio(src);
         sound.volume = globalVolume;

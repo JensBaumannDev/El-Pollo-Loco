@@ -1,3 +1,13 @@
+/**
+ * @file StatusBar class
+ * @description Health status bar for the player character
+ */
+
+/**
+ * Health status bar class
+ * @class
+ * @extends DrawableObject
+ */
 class StatusBar extends DrawableObject {
     IMAGES = [
         'img/7_statusbars/1_statusbar/2_statusbar_health/green/0.png',
@@ -10,6 +20,10 @@ class StatusBar extends DrawableObject {
 
     percentage = 100;
 
+    /**
+     * Creates a status bar instance
+     * @constructor
+     */
     constructor() {
         super();
         this.loadImages(this.IMAGES);
@@ -20,6 +34,10 @@ class StatusBar extends DrawableObject {
         this.setPercentage(100);
     }
 
+    /**
+     * Sets the status bar to display a specific percentage
+     * @param {number} percentage - Health percentage (0-100)
+     */
     setPercentage(percentage) {
         this.percentage = percentage;
         let path = this.IMAGES[this.resolveImageIndex()];

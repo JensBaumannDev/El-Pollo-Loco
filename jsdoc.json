@@ -1,0 +1,18 @@
+{
+    "source": {
+        "include": ["js", "models", "levels"],
+        "includePattern": ".+\\.js(doc|x)?$",
+        "excludePattern": "(node_modules/|docs)"
+    },
+
+    "opts": {
+        "destination": "./docs",
+        "recurse": true
+    },
+
+    "plugins": [],
+    "templates": {
+        "cleverLinks": false,
+        "monospaceLinks": false
+    }
+}

@@ -1,3 +1,13 @@
+/**
+ * @file Coin class
+ * @description Collectable coin object
+ */
+
+/**
+ * Coin object class
+ * @class
+ * @extends MovableObject
+ */
 class Coin extends MovableObject {
     width = 100;
     height = 100;
@@ -8,6 +18,12 @@ class Coin extends MovableObject {
         'img/8_coin/coin_2.png'
     ];
 
+    /**
+     * Creates a coin instance
+     * @constructor
+     * @param {number} x - X position
+     * @param {number} y - Y position
+     */
     constructor(x, y) {
         super().loadImage('img/8_coin/coin_1.png');
         this.loadImages(this.IMAGES);

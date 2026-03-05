@@ -1,3 +1,13 @@
+/**
+ * @file EndbossStatusBar class
+ * @description Status bar showing endboss health
+ */
+
+/**
+ * Endboss health status bar class
+ * @class
+ * @extends DrawableObject
+ */
 class EndbossStatusBar extends DrawableObject {
     IMAGES = [
         'img/7_statusbars/2_statusbar_endboss/green/green0.png',

@@ -1,3 +1,13 @@
+/**
+ * @file ChickenSmall class
+ * @description Small chicken enemy
+ */
+
+/**
+ * Small chicken enemy class
+ * @class
+ * @extends MovableObject
+ */
 class ChickenSmall extends MovableObject {
     y = 360;
     height = 60;

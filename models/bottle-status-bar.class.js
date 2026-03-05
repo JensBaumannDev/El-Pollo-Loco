@@ -1,3 +1,13 @@
+/**
+ * @file BottleStatusBar class
+ * @description Status bar showing collected bottles
+ */
+
+/**
+ * Bottle collection status bar class
+ * @class
+ * @extends DrawableObject
+ */
 class BottleStatusBar extends DrawableObject {
     BOTTLE_IMAGES = [
         'img/7_statusbars/1_statusbar/3_statusbar_bottle/green/0.png',
@@ -21,6 +31,10 @@ class BottleStatusBar extends DrawableObject {
         this.setAmount(0);
     }
 
+    /**
+     * Sets the bottle amount and updates display
+     * @param {number} amount - Number of bottles collected
+     */
     setAmount(amount) {
         let percentage = (amount / this.maxBottles) * 100;
         this.setPercentage(percentage);

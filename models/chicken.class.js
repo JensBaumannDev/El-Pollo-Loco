@@ -1,3 +1,13 @@
+/**
+ * @file Chicken class
+ * @description Normal-sized chicken enemy
+ */
+
+/**
+ * Basic chicken enemy class
+ * @class
+ * @extends MovableObject
+ */
 class Chicken extends MovableObject {
     y = 346;
     height = 80;
@@ -25,6 +35,9 @@ class Chicken extends MovableObject {
         this.speed = 1 + Math.random() * 5;
     }
 
+    /**
+     * Starts all chicken animations
+     */
     startAnimations() {
         this.startWalkLoop();
         this.startAnimationLoop();

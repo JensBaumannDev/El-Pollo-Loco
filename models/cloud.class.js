@@ -1,3 +1,13 @@
+/**
+ * @file Cloud class
+ * @description Moving cloud decoration object
+ */
+
+/**
+ * Cloud object class
+ * @class
+ * @extends MovableObject
+ */
 class Cloud extends MovableObject {
     y = 50;
     height = 250;

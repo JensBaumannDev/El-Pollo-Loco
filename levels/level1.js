@@ -1,3 +1,12 @@
+/**
+ * @file Level 1 initialization
+ * @description Creates and initializes all objects for the first level
+ */
+
+/**
+ * Initializes the background layers for the level
+ * @returns {BackgroundObject[]} Array of background objects with parallax layers
+ */
 function initBackground() {
     let backgroundObjects = [];
     for (let index = -10; index <= 14; index++) {
@@ -8,6 +17,12 @@ function initBackground() {
     return backgroundObjects;
 };
 
+/**
+ * Adds background layers to the array with parallax effect
+ * @param {BackgroundObject[]} array - Array to add background objects to
+ * @param {number} x - X position for the background
+ * @param {string} suffix - Suffix for the image filename (1 or 2)
+ */
 function addBackgroundLayers(array, x, suffix) {
     array.push(
         new BackgroundObject('img/5_background/layers/air.png', x, 0.1),
@@ -17,6 +32,10 @@ function addBackgroundLayers(array, x, suffix) {
     );
 }
 
+/**
+ * Initializes cloud objects for the level
+ * @returns {Cloud[]} Array of cloud objects
+ */
 function initClouds() {
     let clouds = [];
     for (let i = 0; i < 15; i++) {
@@ -25,6 +44,10 @@ function initClouds() {
     return clouds;
 }
 
+/**
+ * Initializes enemy chickens and the endboss
+ * @returns {Array} Array of enemy objects including chickens and endboss
+ */
 function initEnemies() {
     let enemies = [];
     const numberOfChickens = 8;
@@ -44,6 +67,10 @@ function initEnemies() {
     return enemies;
 }
 
+/**
+ * Initializes collectable coins for the level
+ * @returns {Coin[]} Array of coin objects
+ */
 function initCoins() {
     let coins = [];
     for (let i = 0; i < 30; i++) {
@@ -54,6 +81,10 @@ function initCoins() {
     return coins;
 };
 
+/**
+ * Initializes collectable bottles for the level
+ * @returns {CollectableBottle[]} Array of collectable bottle objects
+ */
 function initCollectableBottles() {
     let bottles = [];
     for (let i = 0; i < 13; i++) {

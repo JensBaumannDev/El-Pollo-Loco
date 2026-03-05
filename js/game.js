@@ -91,10 +91,16 @@ function setupMenuListeners() {
     bind('quitBtn', quitToMenu);
     bind('instructionsBtn', () => setModalOpen('instructionsModal', true));
     bind('settingsBtn', () => setModalOpen('settingsModal', true));
+    bind('impressumBtn', () => setModalOpen('impressumModal', true));
     bind('gameInstructionsBtn', () => setModalOpen('instructionsModal', true));
-    bind('gameSettingsBtn', () => setModalOpen('settingsModal', true));
+    bind('gameSettingsBtn', openPauseMenu);
     bind('closeInstructions', () => setModalOpen('instructionsModal', false));
     bind('closeSettings', () => setModalOpen('settingsModal', false));
+    bind('closeImpressum', () => setModalOpen('impressumModal', false));
+    bind('resumeBtn', resumeGame);
+    bind('pauseInstructionsBtn', () => setModalOpen('instructionsModal', true));
+    bind('pauseSettingsBtn', () => setModalOpen('settingsModal', true));
+    bind('pauseImpressumBtn', () => setModalOpen('impressumModal', true));
 
     let muteBtn = document.getElementById('gameMuteBtn');
     if (muteBtn) {
@@ -271,6 +277,14 @@ function restartGame() {
         init();
         world.start();
     }, 100);
+}
+
+function openPauseMenu() {
+    setModalOpen('pauseMenuModal', true);
+}
+
+function resumeGame() {
+    setModalOpen('pauseMenuModal', false);
 }
 
 function quitToMenu() {

@@ -68,6 +68,10 @@
                     <span class="btn-icon">⚙</span>
                     <span class="btn-text">SETTINGS</span>
                 </button>
+                <button type="button" class="btn btn-secondary" id="impressumBtn">
+                    <span class="btn-icon">ℹ</span>
+                    <span class="btn-text">IMPRESSUM</span>
+                </button>
             </div>
         </div>
     </div>
@@ -134,6 +138,61 @@
                         <button type="button" class="display-btn active" id="normalModeBtn">Normal</button>
                         <button type="button" class="display-btn" id="fullscreenModeBtn">Fullscreen</button>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="impressumModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>IMPRESSUM</h2>
+                <button class="close-btn" id="closeImpressum">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h3>Angaben gemäß § 5 TMG</h3>
+                <p>
+                    <strong>Verantwortlich für den Inhalt:</strong><br>
+                    [Ihr Name]<br>
+                    [Ihre Adresse]<br>
+                    [Ihre Stadt, Postleitzahl]
+                </p>
+                <h3>Kontakt</h3>
+                <p>
+                    <strong>E-Mail:</strong> [Ihre E-Mail-Adresse]<br>
+                    <strong>Telefon:</strong> [Ihre Telefonnummer]
+                </p>
+                <h3>Haftungsausschluss</h3>
+                <p style="font-size: 12px; margin-top: 15px;">
+                    Die Inhalte unserer Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="pauseMenuModal">
+        <div class="modal-content pause-menu-content">
+            <div class="modal-header pause-menu-header">
+                <h2>PAUSED</h2>
+            </div>
+            <div class="modal-body pause-menu-body">
+                <div class="game-menu pause-game-menu">
+                    <button type="button" class="btn btn-primary" id="resumeBtn">
+                        <span class="btn-icon">▶</span>
+                        <span class="btn-text">RESUME</span>
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="pauseInstructionsBtn">
+                        <span class="btn-icon">?</span>
+                        <span class="btn-text">HOW TO PLAY</span>
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="pauseSettingsBtn">
+                        <span class="btn-icon">⚙</span>
+                        <span class="btn-text">SETTINGS</span>
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="pauseImpressumBtn">
+                        <span class="btn-icon">ℹ</span>
+                        <span class="btn-text">IMPRESSUM</span>
+                    </button>
                 </div>
             </div>
         </div>

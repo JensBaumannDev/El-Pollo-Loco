@@ -510,6 +510,7 @@ body {
     left: 15px;
     bottom: 10px;
     flex-direction: row;
+    gap: 24px;
 }
 
 .controls-right {
@@ -519,8 +520,8 @@ body {
 }
 
 .control-btn {
-    width: 45px;
-    height: 45px;
+    width: 40px;
+    height: 40px;
     background: rgba(255, 215, 0, 0.8);
     border: 3px solid #8B4513;
     border-radius: 10px;

@@ -56,25 +56,25 @@ class World {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
-
         this.character = new Character();
-        this.level = new Level(
-            initEnemies(),
-            initClouds(),
-            initBackground(),
-            initCoins(),
-            initCollectableBottles()
-        );
+        this.level = new Level(initEnemies(), initClouds(), initBackground(), initCoins(), initCollectableBottles());
+        this.initGameElements();
+    }
 
+    initGameElements() {
         this.level.enemies.forEach(e => { e.world = this; });
         this.totalCoins = this.level.coins.length;
+        this.initStatusBars();
+        this.setWorld();
+    }
+
+    initStatusBars() {
         this.statusBar.setPercentage(this.character.energy);
         this.coinStatusBar.setPercentage(0);
         this.bottleStatusBar.setAmount(0);
         if (this.level.endboss) {
             this.endbossStatusBar.setPercentage((this.level.endboss.energy / 200) * 100);
         }
-        this.setWorld();
     }
 
     setWorld() {
@@ -90,39 +90,16 @@ class World {
     }
 
     startAllAnimations() {
-        if (this.character.startAnimations) {
-            this.character.startAnimations();
-        }
+        if (this.character?.startAnimations) this.character.startAnimations();
+        this.startAnimationsForCollection(this.level?.enemies);
+        this.startAnimationsForCollection(this.level?.clouds);
+        this.startAnimationsForCollection(this.level?.coins);
+        this.startAnimationsForCollection(this.throwableObjects);
+    }
 
-        if (this.level && this.level.enemies) {
-            this.level.enemies.forEach(enemy => {
-                if (enemy.startAnimations) {
-                    enemy.startAnimations();
-                }
-            });
-        }
-
-        if (this.level && this.level.clouds) {
-            this.level.clouds.forEach(cloud => {
-                if (cloud.startAnimations) {
-                    cloud.startAnimations();
-                }
-            });
-        }
-
-        if (this.level && this.level.coins) {
-            this.level.coins.forEach(coin => {
-                if (coin.startAnimations) {
-                    coin.startAnimations();
-                }
-            });
-        }
-
-        this.throwableObjects.forEach(obj => {
-            if (obj.startAnimations) {
-                obj.startAnimations();
-            }
-        });
+    startAnimationsForCollection(collection) {
+        if (!collection) return;
+        collection.forEach(obj => obj.startAnimations?.());
     }
 
     run() {
@@ -154,25 +131,40 @@ class World {
     }
 
     spawnEnemies() {
+        this.removeOutOfBoundsEnemies();
+        this.addNewChickensIfNeeded();
+    }
+
+    removeOutOfBoundsEnemies() {
         this.level.enemies = this.level.enemies.filter(enemy => {
             if (enemy instanceof Endboss) return true;
             return enemy.x > this.character.x - 500;
         });
+    }
 
+    addNewChickensIfNeeded() {
         const spawnDistance = this.character.x + 1500;
         const existingChickens = this.level.enemies.filter(e => e instanceof Chicken && e.x > spawnDistance - 300).length;
-        
         if (existingChickens < 2) {
-            const newChicken = new Chicken();
-            newChicken.x = spawnDistance + Math.random() * 300;
-            newChicken.world = this;
-            newChicken.startAnimations();
-            this.level.enemies.push(newChicken);
+            this.spawnNewChicken(spawnDistance);
         }
+    }
+
+    spawnNewChicken(spawnDistance) {
+        const newChicken = new Chicken();
+        newChicken.x = spawnDistance + Math.random() * 300;
+        newChicken.world = this;
+        newChicken.startAnimations();
+        this.level.enemies.push(newChicken);
     }
 
     stop() {
         this.gameRunning = false;
+        this.clearIntervals();
+        this.stopAllAnimations();
+    }
+
+    clearIntervals() {
         if (this.runInterval !== null) {
             clearInterval(this.runInterval);
             this.runInterval = null;
@@ -181,40 +173,19 @@ class World {
             cancelAnimationFrame(this.animationFrameId);
             this.animationFrameId = null;
         }
+    }
 
-        if (this.character && this.character.stopAnimations) {
-            this.character.stopAnimations();
-        }
+    stopAllAnimations() {
+        if (this.character?.stopAnimations) this.character.stopAnimations();
+        this.stopAnimationsForCollection(this.level?.enemies);
+        this.stopAnimationsForCollection(this.level?.clouds);
+        this.stopAnimationsForCollection(this.level?.coins);
+        this.stopAnimationsForCollection(this.throwableObjects);
+    }
 
-        if (this.level && this.level.enemies) {
-            this.level.enemies.forEach(enemy => {
-                if (enemy.stopAnimations) {
-                    enemy.stopAnimations();
-                }
-            });
-        }
-
-        if (this.level && this.level.clouds) {
-            this.level.clouds.forEach(cloud => {
-                if (cloud.stopAnimations) {
-                    cloud.stopAnimations();
-                }
-            });
-        }
-
-        if (this.level && this.level.coins) {
-            this.level.coins.forEach(coin => {
-                if (coin.stopAnimations) {
-                    coin.stopAnimations();
-                }
-            });
-        }
-
-        this.throwableObjects.forEach(obj => {
-            if (obj.stopAnimations) {
-                obj.stopAnimations();
-            }
-        });
+    stopAnimationsForCollection(collection) {
+        if (!collection) return;
+        collection.forEach(obj => obj.stopAnimations?.());
     }
 
     checkThrowObjects() {
@@ -235,99 +206,127 @@ class World {
 
     checkGameOver() {
         if (this.gameOver) return;
+        if (this.character.isDead?.()) this.handleCharacterDeath();
+        if (this.level.endboss?.isDead) this.handleEndbossDeath();
+    }
 
-        if (this.character.isDead && this.character.isDead()) {
-            if (this.characterDeadTime === null) {
-                this.characterDeadTime = Date.now();
-                this.gameRunning = false;
-            }
-
-            if (Date.now() - this.characterDeadTime > 700) {
-                this.gameOver = true;
-                this.stop();
-                document.getElementById('gameContainer').style.display = 'none';
-                showEndscreen(false);
-            }
-            return;
+    handleCharacterDeath() {
+        if (this.characterDeadTime === null) {
+            this.characterDeadTime = Date.now();
+            this.gameRunning = false;
         }
+        if (Date.now() - this.characterDeadTime > 700) {
+            this.gameOver = true;
+            this.stop();
+            document.getElementById('gameContainer').style.display = 'none';
+            showEndscreen(false);
+        }
+    }
 
-        if (this.level.endboss && this.level.endboss.isDead) {
-            if (this.endbossDeadTime === null) {
-                this.endbossDeadTime = Date.now();
-                this.gameRunning = false;
-            }
-
-            if (Date.now() - this.endbossDeadTime > 750) {
-                this.gameOver = true;
-                this.stop();
-                showEndscreen(true);
-            }
-            return;
+    handleEndbossDeath() {
+        if (this.endbossDeadTime === null) {
+            this.endbossDeadTime = Date.now();
+            this.gameRunning = false;
+        }
+        if (Date.now() - this.endbossDeadTime > 750) {
+            this.gameOver = true;
+            this.stop();
+            showEndscreen(true);
         }
     }
 
     checkCollisions() {
+        this.checkCharacterEnemyCollisions();
+        this.checkCoinCollisions();
+        this.checkBottleCollections();
+        this.checkThrowableObjectCollisions();
+    }
+
+    checkCharacterEnemyCollisions() {
         let killedChicken = false;
         let gotHit = false;
         for (const enemy of this.level.enemies) {
             if (enemy.isDead || !this.character.isColliding(enemy)) continue;
-            if (
-                enemy instanceof Chicken &&
-                this.character.speedY < 0 &&
-                (this.character.y + this.character.height - this.character.offset.bottom) < (enemy.y + enemy.height / 2)
-            ) {
+            if (this.isChickenJumpKill(enemy)) {
                 enemy.die();
                 killedChicken = true;
                 this.playSound(this.mySounds.chicken.dead);
             } else if (!this.character.isHurt() && !gotHit) {
-                this.character.hit();
-                this.statusBar.setPercentage(this.character.energy);
-                this.playSound(this.mySounds.character.damage);
+                this.handleCharacterHit();
                 gotHit = true;
             }
         }
-        if (killedChicken) {
-            if (this.character.y > 180) this.character.y = 180;
-            this.character.speedY = 12;
-        }
+        if (killedChicken) this.applyJumpBounce();
+    }
 
+    isChickenJumpKill(enemy) {
+        return enemy instanceof Chicken && this.character.speedY < 0 &&
+            (this.character.y + this.character.height - this.character.offset.bottom) < (enemy.y + enemy.height / 2);
+    }
+
+    handleCharacterHit() {
+        this.character.hit();
+        this.statusBar.setPercentage(this.character.energy);
+        this.playSound(this.mySounds.character.damage);
+    }
+
+    applyJumpBounce() {
+        if (this.character.y > 180) this.character.y = 180;
+        this.character.speedY = 12;
+    }
+
+    checkCoinCollisions() {
         this.level.coins.forEach((coin, index) => {
             if (this.character.isColliding(coin)) {
-                this.level.coins.splice(index, 1);
-                this.collectedCoins++;
-                let percentage = (this.collectedCoins / this.totalCoins) * 100;
-                this.coinStatusBar.setPercentage(percentage);
-                this.playSound(this.mySounds.collectibles.collect2);
+                this.collectCoin(index);
             }
         });
+    }
 
+    collectCoin(index) {
+        this.level.coins.splice(index, 1);
+        this.collectedCoins++;
+        let percentage = (this.collectedCoins / this.totalCoins) * 100;
+        this.coinStatusBar.setPercentage(percentage);
+        this.playSound(this.mySounds.collectibles.collect2);
+    }
+
+    checkBottleCollections() {
         this.level.collectableBottles.forEach((bottle, index) => {
             if (this.character.isColliding(bottle)) {
-                this.level.collectableBottles.splice(index, 1);
-                this.collectedBottles++;
-                this.bottleStatusBar.setAmount(this.collectedBottles);
-                this.playSound(this.mySounds.collectibles.collect);
+                this.collectBottle(index);
             }
         });
+    }
 
+    collectBottle(index) {
+        this.level.collectableBottles.splice(index, 1);
+        this.collectedBottles++;
+        this.bottleStatusBar.setAmount(this.collectedBottles);
+        this.playSound(this.mySounds.collectibles.collect);
+    }
+
+    checkThrowableObjectCollisions() {
         this.throwableObjects.forEach((bottle, index) => {
             for (const enemy of this.level.enemies) {
                 if (bottle.isColliding(enemy)) {
-                    if (enemy instanceof Endboss) {
-                        enemy.hit();
-                        this.endbossStatusBar.setPercentage((enemy.energy / 200) * 100);
-                        if (enemy.energy <= 0) {
-                            enemy.die();
-                        }
-                    } else if (enemy instanceof Chicken) {
-                        enemy.hit();
-                    }
-                    this.throwableObjects.splice(index, 1);
-                    this.playSound(this.mySounds.thowable.bottlebreak);
+                    this.handleBottleHit(enemy, index);
                     break;
                 }
             }
         });
+    }
+
+    handleBottleHit(enemy, bottleIndex) {
+        if (enemy instanceof Endboss) {
+            enemy.hit();
+            this.endbossStatusBar.setPercentage((enemy.energy / 200) * 100);
+            if (enemy.energy <= 0) enemy.die();
+        } else if (enemy instanceof Chicken) {
+            enemy.hit();
+        }
+        this.throwableObjects.splice(bottleIndex, 1);
+        this.playSound(this.mySounds.thowable.bottlebreak);
     }
 
     playSound(src) {

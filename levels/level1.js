@@ -3,16 +3,19 @@ function initBackground() {
     for (let index = -10; index <= 14; index++) {
         let x = index * 719;
         let suffix = (Math.abs(index) % 2 === 0) ? '1' : '2';
-
-        backgroundObjects.push(
-            new BackgroundObject('img/5_background/layers/air.png', x, 0.1),
-            new BackgroundObject(`img/5_background/layers/3_third_layer/${suffix}.png`, x, 0.4),
-            new BackgroundObject(`img/5_background/layers/2_second_layer/${suffix}.png`, x, 0.7),
-            new BackgroundObject(`img/5_background/layers/1_first_layer/${suffix}.png`, x, 0.9)
-        );
+        addBackgroundLayers(backgroundObjects, x, suffix);
     }
     return backgroundObjects;
 };
+
+function addBackgroundLayers(array, x, suffix) {
+    array.push(
+        new BackgroundObject('img/5_background/layers/air.png', x, 0.1),
+        new BackgroundObject(`img/5_background/layers/3_third_layer/${suffix}.png`, x, 0.4),
+        new BackgroundObject(`img/5_background/layers/2_second_layer/${suffix}.png`, x, 0.7),
+        new BackgroundObject(`img/5_background/layers/1_first_layer/${suffix}.png`, x, 0.9)
+    );
+}
 
 function initClouds() {
     let clouds = [];

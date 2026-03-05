@@ -26,16 +26,17 @@ class Chicken extends MovableObject {
     }
 
     startAnimations() {
-        this.animate();
+        this.startWalkLoop();
+        this.startAnimationLoop();
     }
 
-    animate() {
+    startWalkLoop() {
         this.walkInterval = setInterval(() => {
-            if (!this.isDead) {
-                this.moveLeft();
-            }
+            if (!this.isDead) this.moveLeft();
         }, 1000 / 60);
+    }
 
+    startAnimationLoop() {
         this.animateInterval = setInterval(() => {
             if (this.isDead) {
                 this.playAnimation(this.IMAGES_DEAD);
@@ -49,14 +50,14 @@ class Chicken extends MovableObject {
         if (this.isDead) return;
         this.isDead = true;
         this.speed = 0;
-        setTimeout(() => {
-            if (this.world && this.world.level && this.world.level.enemies) {
-                const idx = this.world.level.enemies.indexOf(this);
-                if (idx > -1) {
-                    this.world.level.enemies.splice(idx, 1);
-                }
-            }
-        }, 350);
+        setTimeout(() => this.removeFromWorld(), 350);
+    }
+
+    removeFromWorld() {
+        if (this.world?.level?.enemies) {
+            const idx = this.world.level.enemies.indexOf(this);
+            if (idx > -1) this.world.level.enemies.splice(idx, 1);
+        }
     }
 
     stopAnimations() {

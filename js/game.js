@@ -85,32 +85,48 @@ function setupOrientationCheck() {
 }
 
 function setupMenuListeners() {
+    setupMainMenuButtons();
+    setupModalButtons();
+    setupGameButtons();
+    setupMuteButton();
+    setupModalClickHandlers();
+}
+
+function setupMainMenuButtons() {
     const bind = (id, fn) => document.getElementById(id).addEventListener('click', fn);
     bind('startBtn', startGame);
-    bind('restartBtn', restartGame);
-    bind('quitBtn', quitToMenu);
     bind('instructionsBtn', () => setModalOpen('instructionsModal', true));
     bind('settingsBtn', () => setModalOpen('settingsModal', true));
     bind('impressumBtn', () => setModalOpen('impressumModal', true));
-    bind('gameInstructionsBtn', () => setModalOpen('instructionsModal', true));
-    bind('gameSettingsBtn', openPauseMenu);
+}
+
+function setupModalButtons() {
+    const bind = (id, fn) => document.getElementById(id).addEventListener('click', fn);
     bind('closeInstructions', () => setModalOpen('instructionsModal', false));
     bind('closeSettings', () => setModalOpen('settingsModal', false));
     bind('closeImpressum', () => setModalOpen('impressumModal', false));
+}
+
+function setupGameButtons() {
+    const bind = (id, fn) => document.getElementById(id).addEventListener('click', fn);
+    bind('restartBtn', restartGame);
+    bind('quitBtn', quitToMenu);
+    bind('gameInstructionsBtn', () => setModalOpen('instructionsModal', true));
+    bind('gameSettingsBtn', openPauseMenu);
     bind('resumeBtn', resumeGame);
     bind('pauseInstructionsBtn', () => setModalOpen('instructionsModal', true));
     bind('pauseSettingsBtn', () => setModalOpen('settingsModal', true));
     bind('pauseImpressumBtn', () => setModalOpen('impressumModal', true));
+}
 
+function setupMuteButton() {
     let muteBtn = document.getElementById('gameMuteBtn');
-    if (muteBtn) {
-        muteBtn.addEventListener('mousedown', toggleMute);
-    }
+    if (muteBtn) muteBtn.addEventListener('mousedown', toggleMute);
+}
 
+function setupModalClickHandlers() {
     document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', e => {
-        if (e.target === m) {
-            setModalOpen(m.id, false);
-        }
+        if (e.target === m) setModalOpen(m.id, false);
     }));
 }
 
@@ -128,44 +144,45 @@ function syncModalPause() {
     const canControlWorld = world && !world.gameOver && gameVisible;
 
     if (hasOpenModal && !pausedByModal && canControlWorld && world.gameRunning) {
-        keyboard.LEFT = keyboard.RIGHT = keyboard.UP = keyboard.DOWN = keyboard.SPACE = keyboard.f = false;
-        world.stop();
-        pausedByModal = true;
+        pauseGameForModal();
         return;
     }
-
-    if (!hasOpenModal && pausedByModal && canControlWorld) {
-        world.start();
-    }
+    if (!hasOpenModal && pausedByModal && canControlWorld) world.start();
     if (!hasOpenModal) pausedByModal = false;
+}
+
+function pauseGameForModal() {
+    keyboard.LEFT = keyboard.RIGHT = keyboard.UP = keyboard.DOWN = keyboard.SPACE = keyboard.f = false;
+    world.stop();
+    pausedByModal = true;
 }
 
 function setupVolumeControl() {
     const slider = document.getElementById('volumeSlider');
     const label = document.getElementById('volumeValue');
-    let vol = parseFloat(localStorage.getItem('gameVolume'));
-    let fallbackVol = parseFloat(localStorage.getItem('preferredGameVolume'));
-
-    fallbackVol = Number.isFinite(fallbackVol) && fallbackVol > 0 ? fallbackVol : 0.2;
-    if (!Number.isFinite(vol)) {
-        vol = fallbackVol;
-    } else if (vol <= 0) {
-        vol = fallbackVol;
-    }
-
+    let vol = getInitialVolume();
     slider.value = Math.round(vol * 100);
     label.textContent = slider.value + '%';
     setGlobalVolume(vol);
-
     slider.addEventListener('input', function () {
-        label.textContent = this.value + '%';
-        isMuted = false;
-        let muteBtn = document.getElementById('gameMuteBtn');
-        if (muteBtn) {
-            muteBtn.textContent = '🔊';
-        }
-        setGlobalVolume(this.value / 100);
+        handleVolumeChange(this.value, label);
     });
+}
+
+function getInitialVolume() {
+    let vol = parseFloat(localStorage.getItem('gameVolume'));
+    let fallbackVol = parseFloat(localStorage.getItem('preferredGameVolume'));
+    fallbackVol = Number.isFinite(fallbackVol) && fallbackVol > 0 ? fallbackVol : 0.2;
+    if (!Number.isFinite(vol) || vol <= 0) vol = fallbackVol;
+    return vol;
+}
+
+function handleVolumeChange(value, label) {
+    label.textContent = value + '%';
+    isMuted = false;
+    let muteBtn = document.getElementById('gameMuteBtn');
+    if (muteBtn) muteBtn.textContent = '🔊';
+    setGlobalVolume(value / 100);
 }
 
 function setGlobalVolume(volume) {
@@ -186,26 +203,29 @@ function setGlobalVolumeInternal(volume, persist) {
 function setupFullscreenControls() {
     const normBtn = document.getElementById('normalModeBtn');
     const fullBtn = document.getElementById('fullscreenModeBtn');
+    normBtn.addEventListener('click', () => handleNormalMode(normBtn, fullBtn));
+    fullBtn.addEventListener('click', () => handleFullscreenMode(normBtn, fullBtn));
+    document.addEventListener('fullscreenchange', () => handleFullscreenChange(normBtn, fullBtn));
+}
 
-    normBtn.addEventListener('click', () => {
-        if (document.fullscreenElement) document.exitFullscreen();
+function handleNormalMode(normBtn, fullBtn) {
+    if (document.fullscreenElement) document.exitFullscreen();
+    normBtn.classList.add('active');
+    fullBtn.classList.remove('active');
+}
+
+function handleFullscreenMode(normBtn, fullBtn) {
+    const el = document.documentElement;
+    (el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen).call(el);
+    fullBtn.classList.add('active');
+    normBtn.classList.remove('active');
+}
+
+function handleFullscreenChange(normBtn, fullBtn) {
+    if (!document.fullscreenElement) {
         normBtn.classList.add('active');
         fullBtn.classList.remove('active');
-    });
-
-    fullBtn.addEventListener('click', () => {
-        const el = document.documentElement;
-        (el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen).call(el);
-        fullBtn.classList.add('active');
-        normBtn.classList.remove('active');
-    });
-
-    document.addEventListener('fullscreenchange', () => {
-        if (!document.fullscreenElement) {
-            normBtn.classList.add('active');
-            fullBtn.classList.remove('active');
-        }
-    });
+    }
 }
 
 function showLoadingScreen() {
@@ -219,23 +239,29 @@ function hideLoadingScreen() {
 function startGame() {
     pausedByModal = false;
     showLoadingScreen();
-
     let startscreen = document.querySelector('.startscreen');
     startscreen.style.opacity = '0';
     startscreen.style.pointerEvents = 'none';
-
     setTimeout(() => {
-        startscreen.style.display = 'none';
-        document.getElementById('gameContainer').style.display = 'block';
-        init();
-        world.start();
-        requestAnimationFrame(() => {
-            hideLoadingScreen();
-            let startSound = new Audio('audio/game/gameStart.mp3');
-            startSound.volume = globalVolume;
-            startSound.play();
-        });
+        initializeGame(startscreen);
     }, 500);
+}
+
+function initializeGame(startscreen) {
+    startscreen.style.display = 'none';
+    document.getElementById('gameContainer').style.display = 'block';
+    init();
+    world.start();
+    requestAnimationFrame(() => {
+        hideLoadingScreen();
+        playGameStartSound();
+    });
+}
+
+function playGameStartSound() {
+    let startSound = new Audio('audio/game/gameStart.mp3');
+    startSound.volume = globalVolume;
+    startSound.play();
 }
 
 function showEndscreen(won) {
@@ -328,38 +354,24 @@ function setupMobileControls() {
         { id: 'btnJump', key: 'SPACE' },
         { id: 'btnThrow', key: 'f' }
     ];
+    buttons.forEach(btn => setupMobileButton(btn));
+}
 
-    buttons.forEach(btn => {
-        const element = document.getElementById(btn.id);
-        if (!element) return;
+function setupMobileButton(btn) {
+    const element = document.getElementById(btn.id);
+    if (!element) return;
+    setupTouchEvents(element, btn.key);
+    setupMouseEvents(element, btn.key);
+}
 
-        element.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            keyboard[btn.key] = true;
-        });
+function setupTouchEvents(element, key) {
+    element.addEventListener('touchstart', (e) => { e.preventDefault(); keyboard[key] = true; });
+    element.addEventListener('touchend', (e) => { e.preventDefault(); keyboard[key] = false; });
+    element.addEventListener('touchcancel', (e) => { e.preventDefault(); keyboard[key] = false; });
+}
 
-        element.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            keyboard[btn.key] = false;
-        });
-
-        element.addEventListener('touchcancel', (e) => {
-            e.preventDefault();
-            keyboard[btn.key] = false;
-        });
-
-        element.addEventListener('mousedown', (e) => {
-            e.preventDefault();
-            keyboard[btn.key] = true;
-        });
-
-        element.addEventListener('mouseup', (e) => {
-            e.preventDefault();
-            keyboard[btn.key] = false;
-        });
-
-        element.addEventListener('mouseleave', (e) => {
-            keyboard[btn.key] = false;
-        });
-    });
+function setupMouseEvents(element, key) {
+    element.addEventListener('mousedown', (e) => { e.preventDefault(); keyboard[key] = true; });
+    element.addEventListener('mouseup', (e) => { e.preventDefault(); keyboard[key] = false; });
+    element.addEventListener('mouseleave', () => { keyboard[key] = false; });
 }

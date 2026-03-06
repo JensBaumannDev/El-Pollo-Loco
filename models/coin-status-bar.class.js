@@ -30,12 +30,20 @@ class CoinStatusBar extends DrawableObject {
         this.setPercentage(0);
     }
 
+    /**
+     * Sets coin progress percentage and updates bar sprite.
+     * @param {number} percentage - Progress percentage.
+     */
     setPercentage(percentage) {
         this.percentage = percentage;
         let path = this.COIN_IMAGES[this.resolveImageIndex()];
         this.img = this.imageCache[path];
     }
 
+    /**
+     * Resolves image index for the current coin percentage.
+     * @returns {number} Sprite index.
+     */
     resolveImageIndex() {
         if (this.percentage == 100) return 5;
         if (this.percentage > 80) return 4;

@@ -45,6 +45,9 @@ class ThrowableObject extends MovableObject {
         this.startAnimations();
     }
 
+    /**
+     * Starts gravity and horizontal movement for the projectile.
+     */
     startAnimations() {
         if (!this.gravityInterval) {
             this.applyGravity();
@@ -57,6 +60,9 @@ class ThrowableObject extends MovableObject {
         }
     }
 
+    /**
+     * Stops projectile movement and gravity intervals.
+     */
     stopAnimations() {
         if (this.throwInterval) {
             clearInterval(this.throwInterval);

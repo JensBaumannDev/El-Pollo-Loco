@@ -185,6 +185,9 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Switches between walking and idle animation groups.
+     */
     handleIdleOrWalkAnimation() {
         if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
             this.playAnimation(this.IMAGES_WALKING);
@@ -194,6 +197,9 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Plays idle animations and long-idle snoring sequence.
+     */
     handleIdleAnimation() {
         this.framesanimated++;
         if (this.framesanimated === 101) {
@@ -206,6 +212,9 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Chooses jump frame based on current vertical speed.
+     */
     playJumpAnimation() {
         let index = Math.floor(((this.speedY + 30) / 60) * (this.IMAGES_JUMPING.length - 1));
         index = Math.max(0, Math.min(this.IMAGES_JUMPING.length - 1, index));

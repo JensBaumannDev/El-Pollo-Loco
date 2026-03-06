@@ -1,6 +1,6 @@
 {
     "source": {
-        "include": ["js", "models", "levels"],
+        "include": ["game", "models", "levels"],
         "includePattern": ".+\\.js(doc|x)?$",
         "excludePattern": "(node_modules/|docs)"
     },

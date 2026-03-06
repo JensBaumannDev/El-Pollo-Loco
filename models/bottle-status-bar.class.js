@@ -40,12 +40,20 @@ class BottleStatusBar extends DrawableObject {
         this.setPercentage(percentage);
     }
 
+    /**
+     * Sets bottle progress percentage and updates bar sprite.
+     * @param {number} percentage - Progress percentage.
+     */
     setPercentage(percentage) {
         this.percentage = percentage;
         let path = this.BOTTLE_IMAGES[this.resolveImageIndex()];
         this.img = this.imageCache[path];
     }
 
+    /**
+     * Resolves image index for the current bottle percentage.
+     * @returns {number} Sprite index.
+     */
     resolveImageIndex() {
         if (this.percentage >= 100) return 5;
         if (this.percentage >= 80) return 4;

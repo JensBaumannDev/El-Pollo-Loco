@@ -68,18 +68,27 @@ class Endboss extends MovableObject {
         this.startAnimationLoop();
     }
 
+    /**
+     * Starts the movement interval for the active endboss.
+     */
     startMovementLoop() {
         this.moveInterval = setInterval(() => {
             if (this.isActive && !this.isDead) this.moveLeft();
         }, 1000 / 60);
     }
 
+    /**
+     * Starts the animation interval for endboss sprite updates.
+     */
     startAnimationLoop() {
         this.animateInterval = setInterval(() => {
             this.updateAnimation();
         }, 200);
     }
 
+    /**
+     * Selects and plays the current endboss animation state.
+     */
     updateAnimation() {
         if (this.isDead) {
             this.playAnimation(this.IMAGES_DEAD);
@@ -92,12 +101,18 @@ class Endboss extends MovableObject {
         }
     }
 
+    /**
+     * Triggers the one-time alert animation sequence.
+     */
     startAlert() {
         if (this.isDead || this.isActive || this.isAlerting) return;
         this.isAlerting = true;
         this.alertFrameIndex = 0;
     }
 
+    /**
+     * Plays alert frames once, then switches to active movement mode.
+     */
     playAlertAnimationOnce() {
         if (this.alertFrameIndex < this.IMAGES_WALKING.length) {
             let path = this.IMAGES_WALKING[this.alertFrameIndex];
@@ -109,12 +124,18 @@ class Endboss extends MovableObject {
         this.isActive = true;
     }
 
+    /**
+     * Marks the endboss as dead and stops movement speed.
+     */
     die() {
         if (this.isDead) return;
         this.isDead = true;
         this.speed = 0;
     }
 
+    /**
+     * Stops all running endboss animation intervals.
+     */
     stopAnimations() {
         if (this.moveInterval) {
             clearInterval(this.moveInterval);

@@ -31,16 +31,25 @@ class Coin extends MovableObject {
         this.y = y;
     }
 
+    /**
+     * Starts coin animation.
+     */
     startAnimations() {
         this.animate();
     }
 
+    /**
+     * Runs coin frame animation interval.
+     */
     animate() {
         this.animateInterval = setInterval(() => {
             this.playAnimation(this.IMAGES);
         }, 250);
     }
 
+    /**
+     * Stops coin animation interval.
+     */
     stopAnimations() {
         if (this.animateInterval) {
             clearInterval(this.animateInterval);

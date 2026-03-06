@@ -43,12 +43,18 @@ class Chicken extends MovableObject {
         this.startAnimationLoop();
     }
 
+    /**
+     * Starts movement interval for walking behavior.
+     */
     startWalkLoop() {
         this.walkInterval = setInterval(() => {
             if (!this.isDead) this.moveLeft();
         }, 1000 / 60);
     }
 
+    /**
+     * Starts sprite animation interval for walk/dead frames.
+     */
     startAnimationLoop() {
         this.animateInterval = setInterval(() => {
             if (this.isDead) {
@@ -59,6 +65,9 @@ class Chicken extends MovableObject {
         }, 120);
     }
 
+    /**
+     * Marks chicken as dead and removes it after a short delay.
+     */
     die() {
         if (this.isDead) return;
         this.isDead = true;
@@ -66,6 +75,9 @@ class Chicken extends MovableObject {
         setTimeout(() => this.removeFromWorld(), 350);
     }
 
+    /**
+     * Removes this chicken instance from the world enemy list.
+     */
     removeFromWorld() {
         if (this.world?.level?.enemies) {
             const idx = this.world.level.enemies.indexOf(this);
@@ -73,6 +85,9 @@ class Chicken extends MovableObject {
         }
     }
 
+    /**
+     * Stops all active chicken intervals.
+     */
     stopAnimations() {
         if (this.walkInterval) {
             clearInterval(this.walkInterval);

@@ -30,12 +30,20 @@ class EndbossStatusBar extends DrawableObject {
         this.setPercentage(100);
     }
 
+    /**
+     * Sets endboss health percentage and updates bar sprite.
+     * @param {number} percentage - Health percentage.
+     */
     setPercentage(percentage) {
         this.percentage = percentage;
         let path = this.IMAGES[this.resolveImageIndex()];
         this.img = this.imageCache[path];
     }
 
+    /**
+     * Resolves image index for the current endboss health percentage.
+     * @returns {number} Sprite index.
+     */
     resolveImageIndex() {
         if (this.percentage == 100) return 5;
         if (this.percentage >= 80) return 4;

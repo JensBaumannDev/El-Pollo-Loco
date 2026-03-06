@@ -77,10 +77,10 @@ window.addEventListener("keydown", (keyevent) => {
     if (key == 'd') {
         keyboard.RIGHT = true;
     }
-    if (keyevent.code === 'KeyF' || key === 'f') {
+    if (keyevent.code === 'KeyF' || key === 'f' || keyevent.code === 'ControlLeft' || keyevent.code === 'ControlRight') {
         keyboard.f = true;
     }
-    if (keyevent.key == ' ') {
+    if (keyevent.code === 'Space' || keyevent.code === 'Enter') {
         keyboard.SPACE = true;
     }
 });
@@ -97,10 +97,10 @@ window.addEventListener("keyup", (keyevent) => {
     if (key == 'd') {
         keyboard.RIGHT = false;
     }
-    if (keyevent.code === 'KeyF' || key === 'f') {
+    if (keyevent.code === 'KeyF' || key === 'f' || keyevent.code === 'ControlLeft' || keyevent.code === 'ControlRight') {
         keyboard.f = false;
     }
-    if (keyevent.key == ' ') {
+    if (keyevent.code === 'Space' || keyevent.code === 'Enter') {
         keyboard.SPACE = false;
     }
 });

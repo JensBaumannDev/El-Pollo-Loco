@@ -548,6 +548,13 @@ body {
     pointer-events: none;
 }
 
+.control-icon-img {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+    display: block;
+}
+
 @media (hover: none) and (pointer: coarse) and (orientation: landscape) {
     .mobile-controls {
         display: block;

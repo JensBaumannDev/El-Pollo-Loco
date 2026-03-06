@@ -113,23 +113,24 @@ window.addEventListener('DOMContentLoaded', function () {
     updateCanvasSize();
     setupMenuListeners();
     setupVolumeControl();
+    applyStoredMutePreference();
     setupFullscreenControls();
     setupOrientationCheck();
     setupMobileControls();
 });
 
 /**
- * Sets up orientation check to display rotate overlay on mobile devices in portrait mode
+ * Sets up orientation check to display rotate overlay on phones and tablets in portrait mode
  */
 function setupOrientationCheck() {
     const rotateOverlay = document.getElementById('rotateOverlay');
 
     function checkOrientation() {
-        const isSmartphone = window.matchMedia('(max-width: 767px)').matches;
+        const isPhoneOrTablet = window.matchMedia('(max-width: 1024px)').matches;
         const isPortrait = window.matchMedia('(orientation: portrait)').matches;
 
         if (rotateOverlay) {
-            if (isSmartphone && isPortrait) {
+            if (isPhoneOrTablet && isPortrait) {
                 rotateOverlay.style.display = 'flex';
             } else {
                 rotateOverlay.style.display = 'none';
@@ -281,9 +282,35 @@ function getInitialVolume() {
 function handleVolumeChange(value, label) {
     label.textContent = value + '%';
     isMuted = false;
+    localStorage.setItem('gameMuted', 'false');
     let muteBtn = document.getElementById('gameMuteBtn');
     if (muteBtn) muteBtn.textContent = '🔊';
     setGlobalVolume(value / 100);
+}
+
+/**
+ * Applies stored mute state from localStorage.
+ */
+function applyStoredMutePreference() {
+    let muted = localStorage.getItem('gameMuted') === 'true';
+    let muteBtn = document.getElementById('gameMuteBtn');
+    let slider = document.getElementById('volumeSlider');
+    let label = document.getElementById('volumeValue');
+
+    if (!muted) {
+        isMuted = false;
+        if (muteBtn) muteBtn.textContent = '🔊';
+        return;
+    }
+
+    isMuted = true;
+    if (globalVolume > 0) {
+        previousVolume = globalVolume;
+    }
+    setGlobalVolumeInternal(0, false);
+    if (muteBtn) muteBtn.textContent = '🔇';
+    if (slider) slider.value = 0;
+    if (label) label.textContent = '0%';
 }
 
 /**
@@ -501,6 +528,7 @@ function toggleMute() {
         globalVolume = previousVolume > 0 ? previousVolume : 0.3;
         isMuted = false;
         muteBtn.textContent = '🔊';
+        localStorage.setItem('gameMuted', 'false');
     } else {
         if (globalVolume > 0) {
             previousVolume = globalVolume;
@@ -508,9 +536,10 @@ function toggleMute() {
         globalVolume = 0;
         isMuted = true;
         muteBtn.textContent = '🔇';
+        localStorage.setItem('gameMuted', 'true');
     }
 
-    setGlobalVolumeInternal(globalVolume, false);
+    setGlobalVolumeInternal(globalVolume, true);
 }
 
 /**

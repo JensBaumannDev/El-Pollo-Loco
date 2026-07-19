@@ -21,6 +21,8 @@ class World {
     characterDeadTime = null;
     endbossDeadTime = null;
     endbossApproachPlayed = false;
+    shakeUntil = 0;
+    shakeIntensity = 0;
     statusBar = new StatusBar();
     coinStatusBar = new CoinStatusBar();
     bottleStatusBar = new BottleStatusBar();

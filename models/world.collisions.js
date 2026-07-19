@@ -127,12 +127,28 @@ World.prototype.checkThrowableObjectCollisions = function () {
  */
 World.prototype.handleBottleHit = function (enemy, bottleIndex) {
     if (enemy instanceof Endboss) {
-        enemy.hit();
-        this.endbossStatusBar.setPercentage((enemy.energy / 200) * 100);
-        if (enemy.energy <= 0) enemy.die();
+        this.handleEndbossBottleHit(enemy);
     } else if (enemy instanceof Chicken || enemy instanceof ChickenSmall) {
         enemy.hit();
     }
     this.throwableObjects.splice(bottleIndex, 1);
     this.playSound(this.mySounds.thowable.bottlebreak);
+};
+
+/**
+ * Applies a bottle hit to the endboss: extra damage while it recovers,
+ * a flinch reaction, screen shake, and death when depleted.
+ * @param {Endboss} boss - The endboss instance.
+ */
+World.prototype.handleEndbossBottleHit = function (boss) {
+    const vulnerable = boss.combatState === 'recover';
+    boss.hit();
+    if (vulnerable) boss.hit();
+    boss.takeHurt();
+    this.shake(5, 200);
+    this.endbossStatusBar.setPercentage((boss.energy / 200) * 100);
+    if (boss.energy <= 0) {
+        boss.die();
+        this.shake(11, 500);
+    }
 };

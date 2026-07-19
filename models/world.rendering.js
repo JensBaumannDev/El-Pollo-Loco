@@ -11,6 +11,9 @@ World.prototype.draw = function () {
 
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+    const shake = this.getShakeOffset();
+    if (shake) this.ctx.translate(shake.x, shake.y);
+
     this.ctx.translate(this.camera_x, 0);
     this.addBackgroundObjectsWithParallax(this.level.backgroundObjects);
     this.addObjectsWithParallax(this.level.clouds, 0.4);
@@ -30,10 +33,34 @@ World.prototype.draw = function () {
 
     this.ctx.translate(-this.camera_x, 0);
 
+    if (shake) this.ctx.translate(-shake.x, -shake.y);
+
     let self = this;
     this.animationFrameId = requestAnimationFrame(function () {
         self.draw();
     });
+};
+
+/**
+ * Triggers a screen shake for the given duration.
+ * @param {number} intensity - Maximum pixel offset per frame.
+ * @param {number} durationMs - Shake duration in milliseconds.
+ */
+World.prototype.shake = function (intensity, durationMs) {
+    this.shakeIntensity = intensity;
+    this.shakeUntil = Date.now() + durationMs;
+};
+
+/**
+ * Returns the current random shake offset, or null when inactive.
+ * @returns {{x: number, y: number}|null} Offset in pixels.
+ */
+World.prototype.getShakeOffset = function () {
+    if (Date.now() >= this.shakeUntil) return null;
+    return {
+        x: (Math.random() * 2 - 1) * this.shakeIntensity,
+        y: (Math.random() * 2 - 1) * this.shakeIntensity
+    };
 };
 
 /**

@@ -75,6 +75,7 @@ function setupGameButtons() {
     bind('pauseInstructionsBtn', () => setModalOpen('instructionsModal', true));
     bind('pauseSettingsBtn', () => setModalOpen('settingsModal', true));
     bind('pauseImpressumBtn', () => setModalOpen('impressumModal', true));
+    bind('pauseMainMenuBtn', backToMainMenu);
 }
 
 /**
@@ -136,6 +137,17 @@ function openPauseMenu() {
  */
 function resumeGame() {
     setModalOpen('pauseMenuModal', false);
+}
+
+/**
+ * Closes the pause menu and returns to the main start screen.
+ * Closes the modal directly (bypassing the resume-on-close logic) so the
+ * game does not briefly restart before quitting.
+ */
+function backToMainMenu() {
+    document.getElementById('pauseMenuModal').classList.remove('show');
+    if (world) world.stop();
+    quitToMenu();
 }
 
 /**

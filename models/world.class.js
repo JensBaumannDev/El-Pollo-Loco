@@ -64,13 +64,18 @@ class World {
     };
 
     /**
-     * Creates a world instance
+     * Creates a world instance.
+     * Scales the drawing context to the canvas backing resolution so the game
+     * keeps its fixed 720x480 coordinate system while rendering sharply on
+     * larger, high-resolution displays.
      * @constructor
      * @param {HTMLCanvasElement} canvas - The canvas element
      * @param {Keyboard} keyboard - The keyboard input handler
      */
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
+        const renderScale = canvas.width / 720;
+        this.ctx.setTransform(renderScale, 0, 0, renderScale, 0, 0);
         this.canvas = canvas;
         this.keyboard = keyboard;
         this.character = new Character();

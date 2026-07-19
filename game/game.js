@@ -46,13 +46,22 @@ let previousVolume = 0.3;
 let pausedByModal = false;
 
 /**
- * Updates the canvas size to 720x480
+ * Sizes the canvas backing store for crisp high-resolution rendering.
+ * The game logic keeps a fixed 720x480 coordinate system; the backing store
+ * is scaled up (and the context matched) so upscaled display stays sharp.
  */
 function updateCanvasSize() {
     canvas = document.getElementById('canvas');
+    const dpr = window.devicePixelRatio || 1;
+    const displayWidth = canvas.getBoundingClientRect().width || 720;
+    const scale = Math.max(2, Math.ceil((displayWidth * dpr) / 720));
 
-    canvas.width = 720;
-    canvas.height = 480;
+    canvas.width = 720 * scale;
+    canvas.height = 480 * scale;
+
+    if (world && world.ctx) {
+        world.ctx.setTransform(scale, 0, 0, scale, 0, 0);
+    }
 }
 
 /**
@@ -60,6 +69,7 @@ function updateCanvasSize() {
  */
 function init() {
     canvas = document.getElementById('canvas');
+    updateCanvasSize();
     world = new World(canvas, keyboard);
 }
 

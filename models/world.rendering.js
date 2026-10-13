@@ -9,7 +9,7 @@
 World.prototype.draw = function () {
     if (this.gameOver) return;
 
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.clearRect(0, 0, 720, 480);
 
     const shake = this.getShakeOffset();
     if (shake) this.ctx.translate(shake.x, shake.y);
@@ -69,8 +69,19 @@ World.prototype.getShakeOffset = function () {
  */
 World.prototype.addObjectsToMap = function (objects) {
     objects.forEach(o => {
-        this.addToMap(o);
+        if (this.isObjectInView(o)) this.addToMap(o);
     });
+};
+
+/**
+ * Checks whether an object intersects the visible 720-pixel game viewport.
+ * @param {Object} object - Drawable object to check
+ * @param {number} [parallaxFactor=1] - Camera movement factor for the object
+ * @returns {boolean} True when any part of the object is visible
+ */
+World.prototype.isObjectInView = function (object, parallaxFactor = 1) {
+    const screenX = object.x + this.camera_x * parallaxFactor;
+    return screenX + object.width >= 0 && screenX <= 720;
 };
 
 /**
@@ -80,6 +91,7 @@ World.prototype.addObjectsToMap = function (objects) {
  */
 World.prototype.addObjectsWithParallax = function (objects, parallaxFactor) {
     objects.forEach(o => {
+        if (!this.isObjectInView(o, parallaxFactor)) return;
         this.ctx.translate(-this.camera_x, 0);
         this.ctx.translate(this.camera_x * parallaxFactor, 0);
         this.addToMap(o);
@@ -94,6 +106,7 @@ World.prototype.addObjectsWithParallax = function (objects, parallaxFactor) {
  */
 World.prototype.addBackgroundObjectsWithParallax = function (objects) {
     objects.forEach(bgObject => {
+        if (!this.isObjectInView(bgObject, bgObject.parallaxFactor)) return;
         if (bgObject.parallaxFactor !== 1) {
             this.ctx.translate(-this.camera_x, 0);
             this.ctx.translate(this.camera_x * bgObject.parallaxFactor, 0);

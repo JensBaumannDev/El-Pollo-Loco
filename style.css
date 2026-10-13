@@ -22,7 +22,7 @@
     --radius-md: 14px;
     --radius-sm: 10px;
 
-    --stage-w: min(calc(100vw - 32px), calc((100vh - 32px) * 1.5), 1200px);
+    --stage-w: min(calc(100vw - 16px), calc((100dvh - 16px) * 1.5), 1200px);
 
     --shadow-panel: 0 24px 70px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.12);
     --font-body: 'Poppins', 'Segoe UI', system-ui, -apple-system, sans-serif;
@@ -53,8 +53,8 @@ body {
     background-size: cover, cover;
     background-attachment: fixed;
     color: var(--cream);
-    min-height: 100vh;
-    min-height: 100svh;
+    height: 100vh;
+    height: 100dvh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -146,7 +146,7 @@ body::after {
     position: relative;
     width: 100%;
     min-height: 100vh;
-    min-height: 100svh;
+    min-height: 100dvh;
     display: flex;
     align-items: center;
     justify-content: center;

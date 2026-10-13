@@ -46,7 +46,8 @@ let previousVolume = 0.3;
 let pausedByModal = false;
 
 /**
- * Sizes the canvas backing store for crisp high-resolution rendering.
+ * Sizes the canvas backing store for crisp rendering without overloading
+ * high-density mobile displays.
  * The game logic keeps a fixed 720x480 coordinate system; the backing store
  * is scaled up (and the context matched) so upscaled display stays sharp.
  */
@@ -54,7 +55,7 @@ function updateCanvasSize() {
     canvas = document.getElementById('canvas');
     const dpr = window.devicePixelRatio || 1;
     const displayWidth = canvas.getBoundingClientRect().width || 720;
-    const scale = Math.max(2, Math.ceil((displayWidth * dpr) / 720));
+    const scale = Math.min(2, Math.max(1, Math.ceil((displayWidth * dpr) / 720)));
 
     canvas.width = 720 * scale;
     canvas.height = 480 * scale;

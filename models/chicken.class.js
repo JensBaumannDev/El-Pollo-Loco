@@ -79,6 +79,7 @@ class Chicken extends MovableObject {
      * Removes this chicken instance from the world enemy list.
      */
     removeFromWorld() {
+        this.stopAnimations();
         if (this.world?.level?.enemies) {
             const idx = this.world.level.enemies.indexOf(this);
             if (idx > -1) this.world.level.enemies.splice(idx, 1);

@@ -26,7 +26,7 @@ function getInitialVolume() {
     let vol = parseFloat(localStorage.getItem('gameVolume'));
     let fallbackVol = parseFloat(localStorage.getItem('preferredGameVolume'));
     fallbackVol = Number.isFinite(fallbackVol) && fallbackVol > 0 ? fallbackVol : 0.2;
-    if (!Number.isFinite(vol) || vol <= 0) vol = fallbackVol;
+    if (!Number.isFinite(vol) || vol < 0) vol = fallbackVol;
     return vol;
 }
 
@@ -98,7 +98,7 @@ function setGlobalVolumeInternal(volume, persist) {
  */
 function setupMuteButton() {
     let muteBtn = document.getElementById('gameMuteBtn');
-    if (muteBtn) muteBtn.addEventListener('mousedown', toggleMute);
+    if (muteBtn) muteBtn.addEventListener('click', toggleMute);
 }
 
 /**

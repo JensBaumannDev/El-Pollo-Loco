@@ -77,7 +77,8 @@ World.prototype.checkCoinCollisions = function () {
  * @param {number} index - Index of coin in level coin array.
  */
 World.prototype.collectCoin = function (index) {
-    this.level.coins.splice(index, 1);
+    const [coin] = this.level.coins.splice(index, 1);
+    coin?.stopAnimations?.();
     this.collectedCoins++;
     let percentage = (this.collectedCoins / this.totalCoins) * 100;
     this.coinStatusBar.setPercentage(percentage);
@@ -131,7 +132,8 @@ World.prototype.handleBottleHit = function (enemy, bottleIndex) {
     } else if (enemy instanceof Chicken || enemy instanceof ChickenSmall) {
         enemy.hit();
     }
-    this.throwableObjects.splice(bottleIndex, 1);
+    const [bottle] = this.throwableObjects.splice(bottleIndex, 1);
+    bottle?.stopAnimations?.();
     this.playSound(this.mySounds.thowable.bottlebreak);
 };
 

@@ -53,13 +53,14 @@ body {
     background-size: cover, cover;
     background-attachment: fixed;
     color: var(--cream);
-    height: 100vh;
+    min-height: 100vh;
+    min-height: 100svh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 10px;
-    gap: 15px;
+    padding: 0;
+    gap: 0;
     overflow: hidden;
 }
 
@@ -143,13 +144,18 @@ body::after {
 
 .startscreen {
     position: relative;
-    width: var(--stage-w);
-    aspect-ratio: 3 / 2;
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100svh;
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 1;
     animation: panelIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.startscreen .screen-background {
+    display: none;
 }
 
 .screen-background {
@@ -178,7 +184,7 @@ body::after {
     position: relative;
     z-index: 1;
     text-align: center;
-    width: 100%;
+    width: min(100%, 640px);
     padding: 32px;
 }
 
@@ -238,12 +244,13 @@ body::after {
 .btn-primary {
     background: linear-gradient(135deg, var(--gold) 0%, var(--orange) 100%);
     color: var(--ink);
-    box-shadow: 0 8px 22px rgba(255, 138, 61, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+    border: 2px solid rgba(255, 238, 183, 0.9);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.38), 0 0 18px rgba(255, 138, 61, 0.36), inset 0 1px 0 rgba(255, 255, 255, 0.65);
 }
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 14px 30px rgba(255, 138, 61, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.44), 0 0 24px rgba(255, 138, 61, 0.52), inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
 .btn-primary:active {
@@ -254,15 +261,22 @@ body::after {
 .btn-secondary {
     background: var(--glass-soft);
     color: var(--cream);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.62);
     -webkit-backdrop-filter: blur(6px);
     backdrop-filter: blur(6px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.16);
-    border-color: rgba(255, 201, 77, 0.6);
+    background: rgba(255, 201, 77, 0.22);
+    border-color: var(--gold-light);
     transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5), 0 0 14px rgba(255, 201, 77, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.26);
+}
+
+.btn:focus-visible {
+    outline: 3px solid var(--cream);
+    outline-offset: 4px;
 }
 
 .btn-secondary:active {
@@ -399,19 +413,31 @@ body::after {
 }
 
 .close-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    position: relative;
+    display: grid;
+    place-items: center;
     width: 38px;
     height: 38px;
+    padding: 0;
     background: var(--glass-soft);
     border: 1px solid rgba(255, 255, 255, 0.18);
     border-radius: 50%;
     color: var(--cream);
-    font-size: 22px;
+    font-size: 0;
     cursor: pointer;
-    line-height: 1;
     transition: all 0.2s;
+}
+
+.close-btn::before {
+    content: '×';
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: var(--cream);
+    font-family: Arial, sans-serif;
+    font-size: 25px;
+    line-height: 1;
 }
 
 .close-btn:hover {
@@ -762,8 +788,8 @@ body::after {
 /* #region Responsive */
 @media (max-width: 768px) {
     body {
-        padding: 5px;
-        gap: 10px;
+        padding: 0;
+        gap: 0;
     }
 
     .screen-content {
@@ -822,8 +848,8 @@ body::after {
 
 @media (orientation: landscape) and (max-height: 500px) {
     body {
-        gap: 8px;
-        padding: 5px;
+        gap: 0;
+        padding: 0;
     }
 
     .screen-content {

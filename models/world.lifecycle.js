@@ -55,7 +55,9 @@ World.prototype.removeOutOfBoundsEnemies = function () {
     this.level.enemies = this.level.enemies.filter(enemy => {
         if (enemy instanceof Endboss) return true;
         if (enemy instanceof Chicken || enemy instanceof ChickenSmall) {
-            return enemy.x > this.character.x - 500;
+            const shouldKeep = enemy.x > this.character.x - 500;
+            if (!shouldKeep) enemy.stopAnimations?.();
+            return shouldKeep;
         }
         return true;
     });

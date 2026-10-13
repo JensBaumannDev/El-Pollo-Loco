@@ -26,9 +26,7 @@ function startGame() {
     let startscreen = document.querySelector('.startscreen');
     startscreen.style.opacity = '0';
     startscreen.style.pointerEvents = 'none';
-    setTimeout(() => {
-        initializeGame(startscreen);
-    }, 500);
+    initializeGame(startscreen);
 }
 
 /**
@@ -37,13 +35,55 @@ function startGame() {
  */
 function initializeGame(startscreen) {
     startscreen.style.display = 'none';
-    document.getElementById('gameContainer').style.display = 'block';
     init();
-    world.start();
-    requestAnimationFrame(() => {
-        hideLoadingScreen();
-        playGameStartSound();
+    waitForWorldImages(world).then(() => {
+        const gameContainer = document.getElementById('gameContainer');
+        gameContainer.style.display = 'block';
+        updateCanvasSize();
+        world.start();
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+            hideLoadingScreen();
+            playGameStartSound();
+        }));
     });
+}
+
+/**
+ * Waits until images used by the initial game world have loaded or failed.
+ * @param {World} gameWorld - The initialized world to inspect
+ * @returns {Promise<void>} Resolves when the world's images are ready
+ */
+function waitForWorldImages(gameWorld) {
+    const images = new Set();
+    const visited = new Set();
+
+    function collectImages(value) {
+        if (!value || typeof value !== 'object' || visited.has(value)) return;
+        visited.add(value);
+
+        if (value instanceof HTMLImageElement) {
+            images.add(value);
+            return;
+        }
+
+        if (Array.isArray(value)) {
+            value.forEach(collectImages);
+            return;
+        }
+
+        Object.entries(value).forEach(([key, nestedValue]) => {
+            if (key !== 'world' && key !== 'canvas' && key !== 'ctx') collectImages(nestedValue);
+        });
+    }
+
+    collectImages(gameWorld);
+    return Promise.all([...images].map(image => {
+        if (image.complete) return Promise.resolve();
+        return new Promise(resolve => {
+            image.addEventListener('load', resolve, { once: true });
+            image.addEventListener('error', resolve, { once: true });
+        });
+    }));
 }
 
 /**
